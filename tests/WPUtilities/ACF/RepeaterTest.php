@@ -1,11 +1,11 @@
 <?php
-namespace tests\ACFUtilities;
+namespace tests\WPUtilities\ACF;
 
 class RepeaterTest extends \tests\Base
 {
     public function setUp()
     {
-        $this->testClass = new \ACFUtilities\Repeater();
+        $this->testClass = new \WPUtilities\ACF\Repeater();
         parent::setup();
     }
 

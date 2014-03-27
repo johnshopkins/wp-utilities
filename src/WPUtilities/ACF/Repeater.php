@@ -1,6 +1,6 @@
 <?php
 
-namespace ACFHelpers;
+namespace WPUtilities\ACF;
 
 class Repeater
 {
