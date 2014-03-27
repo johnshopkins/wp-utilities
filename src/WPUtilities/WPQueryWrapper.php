@@ -1,6 +1,6 @@
 <?php
 
-namespace WP\Utilities;
+namespace WPUtilities;
 
 class WPQueryWrapper
 {
