@@ -1,8 +1,8 @@
 {
-    "name": "johnshopkins/wp-acf-utilities",
+    "name": "johnshopkins/wp-utilities",
     "autoload": {
         "psr-0": {
-            "ACFHelpers": "src/"
+            "WpUtilties": "src/"
         }
     }
 }
