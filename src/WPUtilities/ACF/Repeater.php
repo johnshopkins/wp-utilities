@@ -50,11 +50,6 @@ class Repeater
 
         foreach ($meta as $k => $v) {
 
-            // meta is always in an array when retrieved from WP
-            if (is_array($v)) {
-                $v = array_shift($v);
-            }
-
             if (is_numeric($v)) {
                 $ints[] = $k;
             }
