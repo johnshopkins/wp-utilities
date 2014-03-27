@@ -1,9 +1,5 @@
 {
     "name": "johnshopkins/wp-acf-utilities",
-    "type": "wordpress-plugin",
-    "require": {
-        "composer/installers": "~1.0"
-    },
     "autoload": {
         "psr-0": {
             "ACFHelpers": "src/"
