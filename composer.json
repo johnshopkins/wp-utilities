@@ -1,0 +1,13 @@
+{
+    "name": "johnshopkins/wp-acf-helpers",
+    "type": "wordpress-plugin",
+    "mu-plugin": true,
+    "require": {
+        "composer/installers": "~1.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "ACFHelpers": "src/"
+        }
+    }
+}
