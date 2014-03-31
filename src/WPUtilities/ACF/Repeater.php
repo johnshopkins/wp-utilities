@@ -22,12 +22,14 @@ class Repeater
             // for repeater-like subfield meta keys (like "field_0_link")
             // also test keys like field_0_sub_field
             $regex = "/^" . $potential . "_(\d+)_(.+)$/";
+            $verifiedRepeater = false;
 
             // loop through all meta fields and look for repeater-like keys
             foreach ($meta as $key => $value) {
 
                 // if this is a repeater field
                 if (preg_match($regex, $key, $matches)) {
+                    $verifiedRepeater = true;
 
                     $index = $matches[1];
                     $subfield = $matches[2];
@@ -46,7 +48,13 @@ class Repeater
                 }
             }
 
-            $meta[$potential] = $this->squashSimpleRepeater($meta[$potential]);
+            // only squash if this potential was a verified repeater (do not run on fields
+            // that looked like repeaters (had integers)). These could potentially be
+            // repeater subfields that have since been unset.
+            if ($verifiedRepeater) {
+                $meta[$potential] = $this->squashSimpleRepeater($meta[$potential]);
+            }
+            
         }
 
         return $meta;

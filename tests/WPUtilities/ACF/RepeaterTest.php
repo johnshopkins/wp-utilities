@@ -25,19 +25,23 @@ class RepeaterTest extends \tests\Base
             "name" => 2,
             "name_0_firstname" => "John",
             "name_0_lastname" => "Smith",
+            "name_0_zipcode" => 21212,
             "name_1_firstname" => "Jane",
-            "name_1_lastname" => "Doe"
+            "name_1_lastname" => "Doe",
+            "name_1_zipcode" => 21210
         );
 
         $expected = array(
             "name" => array(
                 array(
                     "firstname" => "John",
-                    "lastname" => "Smith"
+                    "lastname" => "Smith",
+                    "zipcode" => 21212
                 ),
                 array(
                     "firstname" => "Jane",
-                    "lastname" => "Doe"
+                    "lastname" => "Doe",
+                    "zipcode" => 21210
                 )
             )
         );
@@ -71,19 +75,23 @@ class RepeaterTest extends \tests\Base
             "name" => 2,
             "name_0_first-name" => "John",
             "name_0_last-name" => "Smith",
+            "name_0_zip-code" => 21212,
             "name_1_first-name" => "Jane",
-            "name_1_last-name" => "Doe"
+            "name_1_last-name" => "Doe",
+            "name_1_zip-code" => 21210
         );
 
         $expected = array(
             "name" => array(
                 array(
                     "first-name" => "John",
-                    "last-name" => "Smith"
+                    "last-name" => "Smith",
+                    "zip-code" => 21212
                 ),
                 array(
                     "first-name" => "Jane",
-                    "last-name" => "Doe"
+                    "last-name" => "Doe",
+                    "zip-code" => 21210
                 )
             )
         );
@@ -92,7 +100,7 @@ class RepeaterTest extends \tests\Base
         $this->assertEquals($expected, $result);
     }
 
-    public function testSquashSimpleRepeaterNeedsSwuashing()
+    public function testSquashSimpleRepeaterNeedsSquashing()
     {
         $given = array(
             array("id" => 123),
