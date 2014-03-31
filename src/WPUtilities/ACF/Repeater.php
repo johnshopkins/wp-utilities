@@ -45,9 +45,32 @@ class Repeater
 
                 }
             }
+
+            $meta[$potential] = $this->squashSimpleRepeater($meta[$potential]);
         }
 
         return $meta;
+    }
+
+    /**
+     * Some repeaters only have one subfield. For example, a field "IDs" has
+     * subfields called "ID." In this case we don't need to keep a record of
+     * the name of the subfield, so we just pass the ids back up to the "IDs"
+     * field.
+     * @param  array $repeater Repeater data
+     * @return array
+     */
+    protected function squashSimpleRepeater($repeater)
+    {
+        if (!is_array($repeater) || count($repeater[0]) !== 1) {
+            return $repeater;
+        }
+
+        return array_map(function ($a) {
+            $keys = array_keys($a);
+            $key = array_shift($keys);
+            return $a[$key];
+        }, $repeater);
     }
 
     public function createRepeater($array = array())

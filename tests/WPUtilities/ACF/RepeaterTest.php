@@ -46,6 +46,25 @@ class RepeaterTest extends \tests\Base
         $this->assertEquals($expected, $result);
     }
 
+    public function testCleanMetaRepeatersWithOneSubfield()
+    {
+        $given = array(
+            "name" => 2,
+            "name_0_firstname" => "John",
+            "name_1_firstname" => "Jane",
+        );
+
+        $expected = array(
+            "name" => array(
+                "John",
+                "Jane"
+            )
+        );
+        
+        $result = $this->testClass->cleanMeta($given);
+        $this->assertEquals($expected, $result);
+    }
+
     public function testCleanMetaRepeatersWithSubfieldHyphens()
     {
         $given = array(
@@ -70,6 +89,44 @@ class RepeaterTest extends \tests\Base
         );
         
         $result = $this->testClass->cleanMeta($given);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testSquashSimpleRepeaterNeedsSwuashing()
+    {
+        $given = array(
+            array("id" => 123),
+            array("id" => 456)
+        );
+
+        $expected = array(123, 456);
+
+        $method = $this->getMethod("squashSimpleRepeater");
+        $result = $method->invoke($this->testClass, $given);
+        
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testSquashSimpleRepeaterDoesNotNeedSquashing()
+    {
+        $method = $this->getMethod("squashSimpleRepeater");
+
+        $given = $expected = "String value";
+        $result = $method->invoke($this->testClass, $given);
+        $this->assertEquals($expected, $result);
+
+        $given = $expected = array(
+            array(
+                "one" => "two",
+                "three" => "four"
+            ),
+            array(
+                "one" => "two",
+                "three" => "four"
+            )
+        );
+
+        $result = $method->invoke($this->testClass, $given);
         $this->assertEquals($expected, $result);
     }
 
