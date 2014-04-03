@@ -12,15 +12,15 @@ class RepeaterTest extends \tests\Base
         parent::setup();
     }
 
-    // public function testCleanMetaNoRepeaters()
-    // {
-    //     $given = $expected = array(
-    //         "key" => "value"
-    //     );
+    public function testCleanMetaNoRepeaters()
+    {
+        $given = $expected = array(
+            "key" => "value"
+        );
 
-    //     $result = $this->testClass->cleanMeta($given);
-    //     $this->assertEquals($expected, $result);
-    // }
+        $result = $this->testClass->cleanMeta($given);
+        $this->assertEquals($expected, $result);
+    }
 
     public function testCleanMetaRepeaters()
     {
