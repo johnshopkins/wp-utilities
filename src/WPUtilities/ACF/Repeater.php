@@ -4,6 +4,19 @@ namespace WPUtilities\ACF;
 
 class Repeater
 {
+    protected $wordpress;
+    protected $wpquery_wrapper;
+
+    public function __construct()
+    {
+        // allow for dependency injection (testing)
+        $args = func_get_args();
+        $args = array_shift($args);
+
+        $this->wordpress = isset($args["wordpress"]) ? $args["wordpress"] : new \WPUtilities\WordPressWrapper();
+        $this->wpquery_wrapper = isset($args["wordpress_query"]) ? $args["wordpress_query"] : new \WPUtilities\WPQueryWrapper();
+    }
+
     /**
      * Take metadata from a WordPress post and clean up
      * the ACF repeater fields
@@ -12,10 +25,15 @@ class Repeater
      */
     public function cleanMeta($meta)
     {
-        // potential ACF fields based on integer value
-        $potentials = $this->findIntegerValues($meta);
+        $this->compileRepeatersWithSubfields($meta);
+        $this->compileRepeatersWithNoSubfields($meta);
 
-        // narrow the potentials to actuals
+        return $meta;
+    }
+
+    protected function compileRepeatersWithSubfields(&$meta)
+    {
+        $potentials = $this->findIntegerValues($meta);
 
         foreach ($potentials as $potential) {
 
@@ -48,16 +66,48 @@ class Repeater
                 }
             }
 
+            // even at this point we have missed repeaters that do
+            // not have any subfields
+
             // only squash if this potential was a verified repeater (do not run on fields
             // that looked like repeaters (had integers)). These could potentially be
             // repeater subfields that have since been unset.
             if ($verifiedRepeater) {
                 $meta[$potential] = $this->squashSimpleRepeater($meta[$potential]);
             }
-            
-        }
 
-        return $meta;
+        }
+    }
+
+    protected function compileRepeatersWithNoSubfields(&$meta)
+    {
+        $potentials = $this->findIntegerValues($meta, true);
+
+        foreach ($potentials as $potential) {
+            
+            if (!isset($meta["_{$potential}"])) {
+                continue;
+            }
+
+            if (!preg_match("/^field_/", $meta["_{$potential}"])) {
+                continue;
+            }
+
+            $fieldid = $meta["_{$potential}"];
+            
+            // look for meta value based on meta key
+            $params = array(
+                "meta_key" => $fieldid,
+                "post_type" => "acf"
+            );
+            $result = $this->wpquery_wrapper->run($params);
+            $postid = $result->post->ID;
+            $field = $this->wordpress->get_post_meta($postid, $fieldid, true);
+
+            if ($field["type"] == "repeater") {
+                $meta[$potential] = array();
+            }
+        }
     }
 
     /**
@@ -115,7 +165,7 @@ class Repeater
                 }
 
                 $num++;
-                
+
             }
 
         }
@@ -127,17 +177,21 @@ class Repeater
     /**
      * Find meta keys whose values are integers
      * @param  array $meta Metadata
+     * @param  boolean $zero Return only keys whose value is 0
      * @return array Keys
      */
-    protected function findIntegerValues($meta)
+    protected function findIntegerValues($meta, $zero = false)
     {
         $ints = array();
 
         foreach ($meta as $k => $v) {
 
-            if (is_numeric($v)) {
+            $shouldEqual = $zero ? 0 : $v;
+
+            if (is_numeric($v) && (int) $v == $shouldEqual) {
                 $ints[] = $k;
             }
+            
         }
 
         return $ints;

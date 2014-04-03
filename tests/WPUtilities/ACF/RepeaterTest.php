@@ -5,19 +5,22 @@ class RepeaterTest extends \tests\Base
 {
     public function setUp()
     {
-        $this->testClass = new \WPUtilities\ACF\Repeater();
+        $this->testClass = new \WPUtilities\ACF\Repeater(array(
+            "wordpress" => $this->getWordPress(),
+            "wordpress_query" => $this->getWordPressQuery()
+        ));
         parent::setup();
     }
 
-    public function testCleanMetaNoRepeaters()
-    {
-        $given = $expected = array(
-            "key" => "value"
-        );
+    // public function testCleanMetaNoRepeaters()
+    // {
+    //     $given = $expected = array(
+    //         "key" => "value"
+    //     );
 
-        $result = $this->testClass->cleanMeta($given);
-        $this->assertEquals($expected, $result);
-    }
+    //     $result = $this->testClass->cleanMeta($given);
+    //     $this->assertEquals($expected, $result);
+    // }
 
     public function testCleanMetaRepeaters()
     {
@@ -28,7 +31,23 @@ class RepeaterTest extends \tests\Base
             "name_0_zipcode" => 21212,
             "name_1_firstname" => "Jane",
             "name_1_lastname" => "Doe",
-            "name_1_zipcode" => 21210
+            "name_1_zipcode" => 21210,
+
+            // one subfield
+            "ids" => 2,
+            "ids_0_id" => 12345,
+            "ids_1_id" => 67890,
+
+            // repeater with no fields
+            "some_field" => 0,
+            "_some_field" => "field_123456",
+
+            // some field with 0 value
+            "another_field" => 0,
+
+            // hidden field that doesn't follow ACF
+            "yet_another" => 0,
+            "_yet_another" => "tricky"
         );
 
         $expected = array(
@@ -43,9 +62,22 @@ class RepeaterTest extends \tests\Base
                     "lastname" => "Doe",
                     "zipcode" => 21210
                 )
-            )
+            ),
+            "ids" => array(12345, 67890),
+            "some_field" => 0,
+            "_some_field" => "field_123456",
+            "another_field" => 0,
+            "yet_another" => 0,
+            "_yet_another" => "tricky"
         );
         
+        // first test (some_field IS NOT a repeater)
+        $result = $this->testClass->cleanMeta($given);
+        $this->assertEquals($expected, $result);
+
+
+        // second test (some_field IS a repeater)
+        $expected["some_field"] = array();
         $result = $this->testClass->cleanMeta($given);
         $this->assertEquals($expected, $result);
     }
@@ -163,5 +195,36 @@ class RepeaterTest extends \tests\Base
 
         $result = $this->testClass->createRepeater($given);
         $this->assertEquals($expected, $result);
+    }
+
+    protected function getWordPress()
+    {   
+        $wordpress_query = $this->getMockBuilder("\\WPUtilities\\WordPressWrapper")
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $wordpress_query->expects($this->any())
+            ->method("__call")
+            ->with("get_post_meta", $this->anything())
+            ->will($this->onConsecutiveCalls(array("type" => "text"), array("type" => "repeater")));
+
+        return $wordpress_query;
+    }
+
+    protected function getWordPressQuery()
+    {   
+        $wordpress_query = $this->getMockBuilder("\\WPUtilities\\WPQueryWrapper")
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $result = new \StdClass();
+        $result->post = new \StdClass();
+        $result->post->ID = 10;
+
+        $wordpress_query->expects($this->any())
+            ->method("run")
+            ->will($this->returnValue($result));
+
+        return $wordpress_query;
     }
 }
