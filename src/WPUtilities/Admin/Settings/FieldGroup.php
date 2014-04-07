@@ -2,19 +2,13 @@
 
 namespace WPUtilities\Admin\Settings;
 
-/**
- * Creates a section of fields. For an example of what this means,
- * go to Settings > Discussion > Default article settings. There
- * are three fields belonging to the default article settings group.
- */
 class FieldGroup
 {
 	/**
-	 * Machine-friendly name of this field group.
-	 * Gets assigned to the option key
+	 * Machine-friendly name of the field group
 	 * @var string
 	 */
-	protected $machinename;
+	protected $groupName;
 
 	/**
 	 * Readable name of this field group.
@@ -51,23 +45,27 @@ class FieldGroup
 	protected $validation;
 
 	/**
-	 * ID of this field group
+	 * Option ID of this field group
 	 * @var sting
 	 */
-	protected $id;
+	protected $option_id;
 
+	/**
+	 * WordPress wrapper
+	 * @var object
+	 */
 	protected $wordpress;
 
-	public function __construct($machinename, $title, $fields, $page, $section, $validation = null)
+	public function __construct($groupName, $title, $fields, $page, $section, $validation = null)
 	{
-		$this->machinename = $machinename;
+		$this->groupName = $groupName;
 		$this->title = $title;
 		$this->fields = $fields;
 		$this->page = $page;
 		$this->section = $section;
 		$this->validation = $validation;
 
-		$this->id = "{$this->section}_{$this->machinename}";
+		$this->option_id = "{$this->section}_{$this->groupName}";
 
 		$this->wordpress = isset($args["wordpress"]) ? $args["wordpress"] : new \WPUtilities\WordPressWrapper();
 
@@ -77,7 +75,7 @@ class FieldGroup
 	public function addFieldGroup()
 	{
 		$this->wordpress->add_settings_field(
-			$this->id,
+			$this->option_id,
 		    $this->title,
 		    array($this, "printFields"),
 		    $this->page,
@@ -85,7 +83,7 @@ class FieldGroup
 		    array($this->title, $this->fields)  
 		);
 
-		register_setting($this->page, $this->id, $this->validation);
+		$this->wordpress->register_setting($this->page, $this->option_id, $this->validation);
 	}
 
 	public function printFields($args)
@@ -99,7 +97,7 @@ class FieldGroup
 			$method = "get_{$details['type']}";
 			$default = isset($details["default"]) ? $details["default"] : null;
 
-			$html .= $this->$method($this->id, $name, $details["label"], $default);
+			$html .= $this->$method($this->option_id, $name, $details["label"], $default);
 		}
 
 		echo $html;
@@ -121,7 +119,9 @@ class FieldGroup
 		// Create the name attribute of this checkbox
 		$name = $this->getFieldName($optionKey, $key);
 
-		return "<input type=\"checkbox\" id=\"\" name=\"{$name}\" value=\"1\" " . $this->wordpress->checked(1, $value, false) . " /> <label for=\"{$name}\">{$label}</label><br />";
+		$checked = $this->wordpress->checked(1, $value, false);
+
+		return FieldCreator::checkbox($name, $label, 1, $checked);
 	}
 
 	/**
@@ -141,7 +141,7 @@ class FieldGroup
 		$name = $this->getFieldName($optionKey, $key);
 
 		// create html
-		return "<label for=\"{$name}\">{$label}</label> <input type=\"text\" id=\"\" name=\"{$name}\" value=\"" . $value . "\" class=\"regular-text\"> <br />";
+		return FieldCreator::text($name, $label, $value);
 	}
 
 	/**

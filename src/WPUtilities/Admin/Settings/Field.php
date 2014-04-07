@@ -11,11 +11,10 @@ class Field
 	protected $type;
 
 	/**
-	 * Machine-friendly name of this field group.
-	 * Gets assigned to the option key
+	 * Machine-friendly name of this field
 	 * @var string
 	 */
-	protected $machinename;
+	protected $fieldName;
 
 	/**
 	 * Readable name of this field group.
@@ -58,24 +57,28 @@ class Field
 	protected $validation;
 
 	/**
-	 * ID of this field group
+	 * Option ID of this field
 	 * @var sting
 	 */
-	public $id;
+	public $option_id;
 
+	/**
+	 * WordPress wrapper
+	 * @var object
+	 */
 	protected $wordpress;
 
-	public function __construct($type, $machinename, $title, $default, $page, $section, $validation = null)
+	public function __construct($type, $fieldName, $title, $default, $page, $section, $validation = null)
 	{
 		$this->type = $type;
-		$this->machinename = $machinename;
+		$this->fieldName = $fieldName;
 		$this->title = $title;
 		$this->default = $default;
 		$this->page = $page;
 		$this->section = $section;
 		$this->validation = $validation;
 
-		$this->id = "{$this->section}_{$this->machinename}";
+		$this->option_id = "{$this->section}_{$this->fieldName}";
 
 		$this->wordpress = isset($args["wordpress"]) ? $args["wordpress"] : new \WPUtilities\WordPressWrapper();
 
@@ -86,7 +89,7 @@ class Field
 	public function addField()
 	{
 		$this->wordpress->add_settings_field(
-			$this->id,
+			$this->option_id,
 		    $this->title,
 		    array($this, "printField"),
 		    $this->page,
@@ -94,7 +97,7 @@ class Field
 		    array($this->type, $this->default)  
 		);
 
-		$this->wordpress->register_setting($this->page, $this->id, $this->validation);
+		$this->wordpress->register_setting($this->page, $this->option_id, $this->validation);
 	}
 
 	public function printField($args)
@@ -103,27 +106,20 @@ class Field
 		$default = $args[1];
 
 		$method = "get_{$type}";
-		echo $this->$method($this->id, $default);
+		echo $this->$method($this->option_id, $default);
 	}
 
-	protected function get_checkbox($optionKey, $default = null)
+	protected function get_checkbox($name, $default = null)
 	{
-		$currentValue = $this->wordpress->get_option($optionKey);
-
-		$checked = $this->wordpress->checked(1, $currentValue, false);
-
-		return "<input type=\"checkbox\" id=\"\" name=\"{$name}\" value=\"1\" " . $checked . " />";
+		$value = $this->wordpress->get_option($name);
+		$checked = $this->wordpress->checked(1, $value, false);
+		return FieldCreator::checkbox($name, null, 1, $checked);
 	}
 
-	protected function get_text($optionKey, $default = null)
+	protected function get_text($name, $default = null)
 	{
-		$currentValue = $this->wordpress->get_option($optionKey);
-
-		$html = "";
-
-		$html .= "<input type=\"text\" id=\"\" name=\"{$optionKey}\" value=\"" . $currentValue . "\" class=\"regular-text\">";
-
-		return $html;
+		$value = $this->wordpress->get_option($name);
+		return FieldCreator::text($name, null, $value);
 	}
 
 }
