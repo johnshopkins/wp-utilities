@@ -71,8 +71,8 @@ class Field
 		$this->machinename = $machinename;
 		$this->title = $title;
 		$this->default = $default;
-		$this->page = $page->id;
-		$this->section = $section->id;
+		$this->page = $page;
+		$this->section = $section;
 		$this->validation = $validation;
 
 		$this->id = "{$this->section}_{$this->machinename}";
