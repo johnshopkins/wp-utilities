@@ -27,6 +27,7 @@ class Post
     public function getTags($id)
     {
         $tags = $this->wordpress->get_the_tags($id);
+        if (!$tags) return array();
         return array_map(function ($tag) {
             return $tag->name;
         }, $tags);

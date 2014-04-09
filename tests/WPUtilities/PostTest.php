@@ -37,6 +37,9 @@ class PostTest extends \tests\Base
 
         $result = $this->testClass->getTags(10);
         $this->assertEquals($expected, $result);
+
+        $result = $this->testClass->getTags(20);
+        $this->assertEquals(array(), $result);
     }
 
     protected function getWordPress()
@@ -53,7 +56,8 @@ class PostTest extends \tests\Base
                 array("maybe_unserialize", array("baltimore"), "baltimore"),
                 array("maybe_unserialize", array("a:1:{i:0;i:7939;}"), array(7939)),
                 array("maybe_unserialize", array("hidden stuff"), "hidden stuff"),
-                array("get_the_tags", array(10), $this->createTagsArray())
+                array("get_the_tags", array(10), $this->createTagsArray()),
+                array("get_the_tags", array(20), false)
             )));
 
         return $wordpress;
