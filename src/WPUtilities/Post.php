@@ -24,6 +24,14 @@ class Post
         return $this->removeHiddenMeta($meta);
     }
 
+    public function getTags($id)
+    {
+        $tags = $this->wordpress->get_the_tags($id);
+        return array_map(function ($tag) {
+            return $tag->name;
+        }, $tags);
+    }
+
     protected function fixArrays($meta)
     {
         foreach($meta as $k => &$v) {

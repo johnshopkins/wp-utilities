@@ -31,40 +31,13 @@ class PostTest extends \tests\Base
         $this->assertEquals($expected, $result);
     }
 
-    // public function testFixArrays()
-    // {
-    //     $given = array(
-    //         "name" => array("john", "jane", "james"),
-    //         "city" => array("baltimore"),
-    //         "location" => "a:1:{i:0;i:7939;}"
-    //     );
+    public function testGetTags()
+    {
+        $expected = array("astronomy", "space");
 
-    //     $expected = array(
-    //         "name" => array("john", "jane", "james"),
-    //         "city" => "baltimore",
-    //         "location" => array(7939)
-    //     );
-        
-    //     $method = $this->getMethod("fixArrays");
-    //     $result = $method->invoke($this->testClass, $given);
-    //     $this->assertEquals($expected, $result);
-    // }
-
-    // public function testRemoveHiddenMeta()
-    // {
-    //     $given = array(
-    //         "_hidden" => "hidden stuff",
-    //         "shown" => "shown stuff"
-    //     );
-
-    //     $expected = array(
-    //         "shown" => "shown stuff"
-    //     );
-        
-    //     $method = $this->getMethod("removeHiddenMeta");
-    //     $result = $method->invoke($this->testClass, $given);
-    //     $this->assertEquals($expected, $result);
-    // }
+        $result = $this->testClass->getTags(10);
+        $this->assertEquals($expected, $result);
+    }
 
     protected function getWordPress()
     {   
@@ -79,7 +52,8 @@ class PostTest extends \tests\Base
                 array("maybe_unserialize", array(array("john", "jane", "james")), array("john", "jane", "james")),
                 array("maybe_unserialize", array("baltimore"), "baltimore"),
                 array("maybe_unserialize", array("a:1:{i:0;i:7939;}"), array(7939)),
-                array("maybe_unserialize", array("hidden stuff"), "hidden stuff")
+                array("maybe_unserialize", array("hidden stuff"), "hidden stuff"),
+                array("get_the_tags", array(10), $this->createTagsArray())
             )));
 
         return $wordpress;
@@ -92,5 +66,21 @@ class PostTest extends \tests\Base
             ->getMock();
 
         return $repeater;
+    }
+
+    protected function createTagsArray()
+    {
+        $tags = array();
+        $tag1 = new \StdClass();
+        $tag1->name = "astronomy";
+        $tag1->slug = "slug";
+        $tags[] = $tag1;
+
+        $tag2 = new \StdClass();
+        $tag2->name = "space";
+        $tag2->slug = "slugy";
+        $tags[] = $tag2;
+
+        return $tags;
     }
 }
