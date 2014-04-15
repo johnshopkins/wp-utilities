@@ -199,16 +199,16 @@ class RepeaterTest extends \tests\Base
 
     protected function getWordPress()
     {   
-        $wordpress_query = $this->getMockBuilder("\\WPUtilities\\WordPressWrapper")
+        $wordpress = $this->getMockBuilder("\\WPUtilities\\WordPressWrapper")
             ->disableOriginalConstructor()
             ->getMock();
 
-        $wordpress_query->expects($this->any())
+        $wordpress->expects($this->any())
             ->method("__call")
             ->with("get_post_meta", $this->anything())
             ->will($this->onConsecutiveCalls(array("type" => "text"), array("type" => "repeater")));
 
-        return $wordpress_query;
+        return $wordpress;
     }
 
     protected function getWordPressQuery()
