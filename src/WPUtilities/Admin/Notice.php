@@ -22,9 +22,9 @@ class Notice
 
         $class = "updated";
 
-        if ($class == "warning") {
+        if ($type == "warning") {
             $class = "update-nag";
-        } else if ($class == "error") {
+        } else if ($type == "error") {
             $class = "error;";
         }
 
