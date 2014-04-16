@@ -20,13 +20,7 @@ class Notice
 
         $this->wordpress = isset($args["wordpress"]) ? $args["wordpress"] : new \WPUtilities\WordPressWrapper();
 
-        $class = "updated";
-
-        if ($type == "warning") {
-            $class = "update-nag";
-        } else if ($type == "error") {
-            $class = "error;";
-        }
+        $class = $type == "success" ? "updated" : "error";
 
         $this->wordpress->add_action("admin_notices", function () use ($message, $class) {
             echo '<div class="' . $class . '"><p>' . $message . '</p></div>';
