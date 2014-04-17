@@ -25,7 +25,7 @@ class ContentTypes
 
     protected function findGroups()
     {
-        $params = array("post_type" => "acf");
+        $params = array("post_type" => "acf", "posts_per_page" => -1);
         $groups = $this->wpquery_wrapper->run($params);
 
         return $this->findGroupMeta($groups->posts);
