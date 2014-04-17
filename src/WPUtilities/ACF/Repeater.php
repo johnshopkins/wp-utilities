@@ -6,6 +6,10 @@ class Repeater
 {
     protected $wordpress;
     protected $wpquery_wrapper;
+    protected $contentTypes;
+
+    protected $savedTypes = array();
+    protected $repeaters = array();
 
     public function __construct()
     {
@@ -15,120 +19,82 @@ class Repeater
 
         $this->wordpress = isset($args["wordpress"]) ? $args["wordpress"] : new \WPUtilities\WordPressWrapper();
         $this->wpquery_wrapper = isset($args["wordpress_query"]) ? $args["wordpress_query"] : new \WPUtilities\WPQueryWrapper();
+        $this->contentTypes = isset($args["acf_contentTypes"]) ? $args["acf_contentTypes"] : new ContentTypes();
     }
 
     /**
      * Take metadata from a WordPress post and clean up
      * the ACF repeater fields
-     * @param  array $meta Metadata
+     * @param  array  $meta     Metadata
+     * @param  string $postType The type of post this meta belongs to
      * @return array Cleaned up metadata
      */
-    public function cleanMeta($meta)
+    public function cleanMeta($meta, $postType)
     {
-        $this->compileRepeatersWithSubfields($meta);
-        $this->compileRepeatersWithNoSubfields($meta);
+        // get the content type information, once per load
+        if (!$this->savedTypes) {
+            $this->savedTypes = $this->contentTypes->find();
+        }
 
-        return $meta;
+        // find out which fields are repeaters on this post type
+        if (!isset($this->repeaters[$postType])) {
+            $fields = $this->savedTypes[$postType];
+            foreach ($fields as $field) {
+                if ($field["type"] != "repeater") {
+                    continue;
+                }
+                $this->repeaters[$postType][$field["name"]] = $field["sub_fields"];
+            }
+        }
+
+        return $this->compileRepeaters($meta, $this->repeaters[$postType]);
     }
 
-    protected function compileRepeatersWithSubfields(&$meta)
+    protected function compileRepeaters($meta, $repeaterFields)
     {
-        $potentials = $this->findIntegerValues($meta);
+        foreach ($repeaterFields as $name => $subfields) {
 
-        foreach ($potentials as $potential) {
+            $subfields = array_map(function ($subfield) {
+                return $subfield["name"];
+            }, $subfields);
 
-            // for repeater-like subfield meta keys (like "field_0_link")
-            // also test keys like field_0_sub_field
-            $regex = "/^" . $potential . "_(\d+)_(.+)$/";
-            $verifiedRepeater = false;
+            $meta[$name] = array();
 
-            // loop through all meta fields and look for repeater-like keys
             foreach ($meta as $key => $value) {
 
-                // if this is a repeater field
+                $regex = "/^" . $name . "_(\d+)_(.+)$/";
+
                 if (preg_match($regex, $key, $matches)) {
-                    $verifiedRepeater = true;
 
                     $index = $matches[1];
                     $subfield = $matches[2];
 
-                    if (!is_array($meta[$potential])) {
-                        $meta[$potential] = array();
+                    if (!in_array($subfield, $subfields)) {
+                        // repeater imposter
+                        continue;
                     }
 
-                    if (!isset($meta[$potential][$index]) || !is_array($meta[$potential][$index])) {
-                        $meta[$potential][$index] = array();
+                    if (!is_array($meta[$name])) {
+                        $meta[$name] = array();
                     }
 
-                    $meta[$potential][$index][$subfield] = $value;
+                    if (!isset($meta[$name][$index]) || !is_array($meta[$name][$index])) {
+                        $meta[$name][$index] = array();
+                    }
+
+                    if (count($subfields) > 1) {
+                        $meta[$name][$index][$subfield] = $value;
+                    } else {
+                        $meta[$name][$index] = $value;
+                    }
+                    
                     unset($meta[$key]);
 
                 }
             }
 
-            // even at this point we have missed repeaters that do
-            // not have any subfields
-
-            // only squash if this potential was a verified repeater (do not run on fields
-            // that looked like repeaters (had integers)). These could potentially be
-            // repeater subfields that have since been unset.
-            if ($verifiedRepeater) {
-                $meta[$potential] = $this->squashSimpleRepeater($meta[$potential]);
-            }
-
         }
-    }
-
-    protected function compileRepeatersWithNoSubfields(&$meta)
-    {
-        $potentials = $this->findIntegerValues($meta, true);
-
-        foreach ($potentials as $potential) {
-            
-            if (!isset($meta["_{$potential}"])) {
-                continue;
-            }
-
-            if (!preg_match("/^field_/", $meta["_{$potential}"])) {
-                continue;
-            }
-
-            $fieldid = $meta["_{$potential}"];
-            
-            // look for meta value based on meta key
-            $params = array(
-                "meta_key" => $fieldid,
-                "post_type" => "acf"
-            );
-            $result = $this->wpquery_wrapper->run($params);
-            $postid = $result->post->ID;
-            $field = $this->wordpress->get_post_meta($postid, $fieldid, true);
-
-            if ($field["type"] == "repeater") {
-                $meta[$potential] = array();
-            }
-        }
-    }
-
-    /**
-     * Some repeaters only have one subfield. For example, a field "IDs" has
-     * subfields called "ID." In this case we don't need to keep a record of
-     * the name of the subfield, so we just pass the ids back up to the "IDs"
-     * field.
-     * @param  array $repeater Repeater data
-     * @return array
-     */
-    protected function squashSimpleRepeater($repeater)
-    {
-        if (!is_array($repeater) || count($repeater[0]) !== 1) {
-            return $repeater;
-        }
-
-        return array_map(function ($a) {
-            $keys = array_keys($a);
-            $key = array_shift($keys);
-            return $a[$key];
-        }, $repeater);
+        return $meta;
     }
 
     public function createRepeater($array = array())
@@ -180,20 +146,20 @@ class Repeater
      * @param  boolean $zero Return only keys whose value is 0
      * @return array Keys
      */
-    protected function findIntegerValues($meta, $zero = false)
-    {
-        $ints = array();
+    // protected function findIntegerValues($meta, $zero = false)
+    // {
+    //     $ints = array();
 
-        foreach ($meta as $k => $v) {
+    //     foreach ($meta as $k => $v) {
 
-            $shouldEqual = $zero ? 0 : $v;
+    //         $shouldEqual = $zero ? 0 : $v;
 
-            if (is_numeric($v) && (int) $v == $shouldEqual) {
-                $ints[] = $k;
-            }
+    //         if (is_numeric($v) && (int) $v == $shouldEqual) {
+    //             $ints[] = $k;
+    //         }
             
-        }
+    //     }
 
-        return $ints;
-    }
+    //     return $ints;
+    // }
 }

@@ -16,11 +16,11 @@ class Post
         $this->repeater = isset($args["acf_repeater"]) ? $args["acf_repeater"] : new ACF\Repeater();
     }
 
-    public function getMeta($id)
+    public function getMeta($id, $postType)
     {
         $meta = $this->wordpress->get_post_meta($id);
         $meta = $this->fixArrays($meta);
-        $meta = $this->repeater->cleanMeta($meta);
+        $meta = $this->repeater->cleanMeta($meta, $postType);
         return $this->removeHiddenMeta($meta);
     }
 
