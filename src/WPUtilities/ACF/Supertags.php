@@ -4,8 +4,7 @@ namespace WPUtilities\ACF;
 
 class Supertags
 {
-    protected $wordpress;
-    protected $wpquery_wrapper;
+    protected $contentTypes;
 
     public function __construct()
     {
@@ -13,8 +12,6 @@ class Supertags
         $args = func_get_args();
         $args = array_shift($args);
 
-        $this->wordpress = isset($args["wordpress"]) ? $args["wordpress"] : new \WPUtilities\WordPressWrapper();
-        $this->wpquery_wrapper = isset($args["wordpress_query"]) ? $args["wordpress_query"] : new \WPUtilities\WPQueryWrapper();
         $this->contentTypes = isset($args["acf_contentTypes"]) ? $args["acf_contentTypes"] : new ContentTypes();
     }
 
