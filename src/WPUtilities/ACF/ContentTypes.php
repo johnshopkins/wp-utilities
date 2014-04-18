@@ -92,9 +92,11 @@ class ContentTypes
     protected function assignFieldsToContentTypes($fieldGroups)
     {
         $postTypes = $this->wordpress->get_post_types(array("public" => true));
-        $types = array();
+        $types = $postTypes;
 
         foreach ($postTypes as $type) {
+
+            $types[$type] = array();
 
             foreach ($fieldGroups as $fieldGroup) {
 

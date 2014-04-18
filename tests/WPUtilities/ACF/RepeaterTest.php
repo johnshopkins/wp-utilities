@@ -11,7 +11,7 @@ class RepeaterTest extends \tests\Base
                     "type" => "text",
                     "name" => "content"
                 ),
-            );
+            ),
             "post" => array(
                 array(
                     "type" => "supertags",

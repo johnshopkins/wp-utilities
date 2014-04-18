@@ -28,7 +28,8 @@ class ContentTypesTest extends \tests\Base
 
         $expected = array(
             "person" => $this->cleanedFieldGroups[0]["fields"],
-            "something_else" => $this->cleanedFieldGroups[0]["fields"]
+            "something_else" => $this->cleanedFieldGroups[0]["fields"],
+            "noAcfFields" => array()
         );
 
         $this->assertEquals($expected, $result);
@@ -118,7 +119,7 @@ class ContentTypesTest extends \tests\Base
         $wordpress->expects($this->any())
             ->method("__call")
             ->will($this->returnValueMap(array(
-                array("get_post_types", array(array("public" => true)), array("person" => "person", "something_else" => "something_else")),
+                array("get_post_types", array(array("public" => true)), array("person" => "person", "something_else" => "something_else", "noAcfFields" => "noAcfFields")),
                 array("get_post_meta", array(1), $this->wordpress_meta)
             )));
 
