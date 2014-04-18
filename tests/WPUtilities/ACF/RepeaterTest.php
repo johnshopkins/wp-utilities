@@ -6,6 +6,12 @@ class RepeaterTest extends \tests\Base
     public function setUp()
     {
         $contentTypes = array(
+            "no_repeater" => array(
+                array(
+                    "type" => "text",
+                    "name" => "content"
+                ),
+            );
             "post" => array(
                 array(
                     "type" => "supertags",
@@ -75,13 +81,10 @@ class RepeaterTest extends \tests\Base
         );
 
         $expected = array(
-            "text" => "value",
-            "authors" => array(),
-            "media" => array(),
-            "addresses" => array()
+            "text" => "value"
         );
 
-        $result = $this->testClass->cleanMeta($given, "post");
+        $result = $this->testClass->cleanMeta($given, "no_repeater");
         $this->assertEquals($expected, $result);
     }
 

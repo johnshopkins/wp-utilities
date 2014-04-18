@@ -43,6 +43,10 @@ class Repeater
             }
         }
 
+        if (!isset($this->repeaters[$postType])) {
+            return $meta;
+        }
+
         return $this->compileRepeaters($meta, $this->repeaters[$postType]);
     }
 
