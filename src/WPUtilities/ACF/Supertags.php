@@ -12,20 +12,14 @@ class Supertags
         $args = func_get_args();
         $args = array_shift($args);
 
-        $this->contentTypes = isset($args["acf_contentTypes"]) ? $args["acf_contentTypes"] : new ContentTypes();
+        $this->contentTypes = $args["contentTypes"];
     }
 
     public function find()
     {  
-        $contentTypes = $this->contentTypes->find();
-        return $this->findSupertags($contentTypes);
-    }
-
-    protected function findSupertags($contentTypes)
-    {
         $supertags = array();
 
-        foreach($contentTypes as $type => $fields) {
+        foreach($this->contentTypes as $type => $fields) {
 
             $supertags[$type] = array();
 

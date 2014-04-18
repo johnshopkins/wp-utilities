@@ -13,14 +13,14 @@ class Post
         $args = array_shift($args);
         
         $this->wordpress = isset($args["wordpress"]) ? $args["wordpress"] : new WordPressWrapper();
-        $this->repeater = isset($args["acf_repeater"]) ? $args["acf_repeater"] : new ACF\Repeater();
+        $this->contentTypes = isset($args["acf_contentTypes"]) ? $args["acf_contentTypes"] : new ACF\ContentTypes();
     }
 
     public function getMeta($id, $postType)
     {
         $meta = $this->wordpress->get_post_meta($id);
         $meta = $this->fixArrays($meta);
-        $meta = $this->repeater->cleanMeta($meta, $postType);
+        $meta = $this->contentTypes->cleanMeta($meta, $postType);
         return $this->removeHiddenMeta($meta);
     }
 

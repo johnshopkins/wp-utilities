@@ -14,7 +14,7 @@ class PostTest extends \tests\Base
     {
         $this->testClass = new \WPUtilities\Post(array(
             "wordpress" => $this->getWordPress(),
-            "repeater" => $this->getAcf()
+            "acf_contentTypes" => $this->getAcfContentTypes()
         ));
         parent::setup();
     }
@@ -27,7 +27,7 @@ class PostTest extends \tests\Base
             "location" => array(7939)
         );
 
-        $result = $this->testClass->getMeta(10);
+        $result = $this->testClass->getMeta(10, "post");
         $this->assertEquals($expected, $result);
     }
 
@@ -63,13 +63,22 @@ class PostTest extends \tests\Base
         return $wordpress;
     }
 
-    protected function getAcf()
+    protected function getAcfContentTypes()
     {   
-        $repeater = $this->getMockBuilder("\\WPUtilities\\ACF\\Repeater")
+        $contentTypes = $this->getMockBuilder("\\WPUtilities\\ACF\\ContentTypes")
             ->disableOriginalConstructor()
             ->getMock();
 
-        return $repeater;
+        $contentTypes->expects($this->any())
+            ->method("cleanMeta")
+            ->will($this->returnValue(array(
+                "name" => array("john", "jane", "james"),
+                "city" => "baltimore",
+                "location" => array(7939),
+                "_hidden" => "hidden stuff"
+            )));
+
+        return $contentTypes;
     }
 
     protected function createTagsArray()

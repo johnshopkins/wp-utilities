@@ -15,12 +15,43 @@ class ContentTypes
 
         $this->wordpress = isset($args["wordpress"]) ? $args["wordpress"] : new \WPUtilities\WordPressWrapper();
         $this->wpquery_wrapper = isset($args["wordpress_query"]) ? $args["wordpress_query"] : new \WPUtilities\WPQueryWrapper();
+
+        $groups = $this->findGroups();
+        $this->contentTypes = $this->assignFieldsToContentTypes($groups);
+
+        $options = array("contentTypes" => $this->contentTypes);
+        $this->supertags = isset($args["acf_supertags"]) ? $args["acf_supertags"] : new Supertags($options);
+        $this->repeater = isset($args["acf_repeater"]) ? $args["acf_repeater"] : new Repeater($options);
     }
 
+    /**
+     * Find all WordPress content types and
+     * their associatied ACF fields.
+     * @return array
+     */
     public function find()
     {
-        $groups = $this->findGroups();
-        return $this->assignFieldsToContentTypes($groups);
+        return $this->contentTypes;
+    }
+
+    /**
+     * Clean metadata of all ACF weirdness
+     * @param  array  $meta
+     * @param  string $postType
+     * @return array
+     */
+    public function cleanMeta($meta, $postType)
+    {
+        return $this->repeater->cleanMeta($meta, $postType);
+    }
+
+    /**
+     * Find all supertag fields in all content types
+     * @return array
+     */
+    public function findSupertags()
+    {
+        return $this->supertags->find();
     }
 
     protected function findGroups()

@@ -4,22 +4,23 @@ namespace WPUtilities\ACF;
 
 class Repeater
 {
+    protected $contentTypes;
+
     protected $wordpress;
     protected $wpquery_wrapper;
-    protected $contentTypes;
 
     protected $savedTypes = array();
     protected $repeaters = array();
 
-    public function __construct()
+    public function __construct($contentTypes)
     {
         // allow for dependency injection (testing)
         $args = func_get_args();
         $args = array_shift($args);
 
+        $this->contentTypes = $args["contentTypes"];
         $this->wordpress = isset($args["wordpress"]) ? $args["wordpress"] : new \WPUtilities\WordPressWrapper();
         $this->wpquery_wrapper = isset($args["wordpress_query"]) ? $args["wordpress_query"] : new \WPUtilities\WPQueryWrapper();
-        $this->contentTypes = isset($args["acf_contentTypes"]) ? $args["acf_contentTypes"] : new ContentTypes();
     }
 
     /**
@@ -31,14 +32,9 @@ class Repeater
      */
     public function cleanMeta($meta, $postType)
     {
-        // get the content type information, once per load
-        if (!$this->savedTypes) {
-            $this->savedTypes = $this->contentTypes->find();
-        }
-
         // find out which fields are repeaters on this post type
         if (!isset($this->repeaters[$postType])) {
-            $fields = $this->savedTypes[$postType];
+            $fields = $this->contentTypes[$postType];
             foreach ($fields as $field) {
                 if ($field["type"] != "repeater") {
                     continue;
@@ -72,10 +68,6 @@ class Repeater
                     if (!in_array($subfield, $subfields)) {
                         // repeater imposter
                         continue;
-                    }
-
-                    if (!is_array($meta[$name])) {
-                        $meta[$name] = array();
                     }
 
                     if (!isset($meta[$name][$index]) || !is_array($meta[$name][$index])) {
