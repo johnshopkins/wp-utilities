@@ -139,27 +139,4 @@ class Repeater
         return $meta;
 
     }
-
-    /**
-     * Find meta keys whose values are integers
-     * @param  array $meta Metadata
-     * @param  boolean $zero Return only keys whose value is 0
-     * @return array Keys
-     */
-    // protected function findIntegerValues($meta, $zero = false)
-    // {
-    //     $ints = array();
-
-    //     foreach ($meta as $k => $v) {
-
-    //         $shouldEqual = $zero ? 0 : $v;
-
-    //         if (is_numeric($v) && (int) $v == $shouldEqual) {
-    //             $ints[] = $k;
-    //         }
-            
-    //     }
-
-    //     return $ints;
-    // }
 }
