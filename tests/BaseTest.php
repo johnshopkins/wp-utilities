@@ -1,8 +1,8 @@
 <?php
 
-namespace tests;
+namespace WPUtilities;
 
-abstract class Base extends \PHPUnit_Framework_TestCase
+abstract class BaseTest extends \PHPUnit_Framework_TestCase
 {
     /**
 	 * Class you are testing

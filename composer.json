@@ -1,9 +1,8 @@
 {
     "name": "johnshopkins/wp-utilities",
     "autoload": {
-        "psr-0": {
-            "WPUtilities": "src/",
-            "tests": ""
+        "psr-4" : {
+            "WPUtilities\\" : ["src/", "tests/"]
         }
     }
 }

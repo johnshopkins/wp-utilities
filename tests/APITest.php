@@ -1,11 +1,11 @@
 <?php
-namespace tests\WPUtilities;
+namespace WPUtilities;
 
-class APITest extends \tests\Base
+class APITest extends BaseTest
 {
     public function setUp()
     {
-        $this->testClass = new \WPUtilities\API();
+        $this->testClass = new API();
         parent::setup();
     }
 

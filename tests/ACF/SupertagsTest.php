@@ -1,7 +1,7 @@
 <?php
-namespace tests\WPUtilities\ACF;
+namespace WPUtilities\ACF;
 
-class SupertagsTest extends \tests\Base
+class SupertagsTest extends \WPUtilities\BaseTest
 {
     protected $fieldGroups;
 
@@ -67,7 +67,7 @@ class SupertagsTest extends \tests\Base
             )
         );
 
-        $this->testClass = new \WPUtilities\ACF\Supertags(array(
+        $this->testClass = new Supertags(array(
             "contentTypes" => $contentTypes
         ));
 

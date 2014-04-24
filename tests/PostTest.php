@@ -1,7 +1,7 @@
 <?php
-namespace tests\WPUtilities;
+namespace WPUtilities;
 
-class PostTest extends \tests\Base
+class PostTest extends BaseTest
 {
     protected $meta = array(
         "name" => array("john", "jane", "james"),
@@ -12,7 +12,7 @@ class PostTest extends \tests\Base
 
     public function setUp()
     {
-        $this->testClass = new \WPUtilities\Post(array(
+        $this->testClass = new Post(array(
             "wordpress" => $this->getWordPress(),
             "acf_contentTypes" => $this->getAcfContentTypes()
         ));

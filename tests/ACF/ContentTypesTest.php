@@ -1,7 +1,7 @@
 <?php
-namespace tests\WPUtilities\ACF;
+namespace WPUtilities\ACF;
 
-class ContentTypesTest extends \tests\Base
+class ContentTypesTest extends \WPUtilities\BaseTest
 {
     protected $fieldGroups;
 
@@ -14,7 +14,7 @@ class ContentTypesTest extends \tests\Base
     {
         $this->makeVars();
 
-        $this->testClass = new \WPUtilities\ACF\ContentTypes(array(
+        $this->testClass = new ContentTypes(array(
             "wordpress" => $this->getWordPress(),
             "wordpress_query" => $this->getWordPressQuery()
         ));

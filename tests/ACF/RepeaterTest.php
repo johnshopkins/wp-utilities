@@ -1,7 +1,7 @@
 <?php
-namespace tests\WPUtilities\ACF;
+namespace WPUtilities\ACF;
 
-class RepeaterTest extends \tests\Base
+class RepeaterTest extends \WPUtilities\BaseTest
 {
     public function setUp()
     {
@@ -66,7 +66,7 @@ class RepeaterTest extends \tests\Base
             )
         );
 
-        $this->testClass = new \WPUtilities\ACF\Repeater(array(
+        $this->testClass = new Repeater(array(
             "contentTypes" => $contentTypes,
             "wordpress" => $this->getWordPress(),
             "wordpress_query" => $this->getWordPressQuery()
