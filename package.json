@@ -1,0 +1,22 @@
+{
+  "name": "wp-utilities",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/johnshopkins/wp-utilities.git"
+  },
+  "author": [
+    "Jason Rhodes",
+    "Jen Wachter"
+  ],
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "gulp-git": "^0.4.0",
+    "gulp": "^3.6.2",
+    "watchify": "^0.8.2",
+    "gulp-phpunit": "~0.5.1",
+    "minimist": "0.0.8"
+  }
+}

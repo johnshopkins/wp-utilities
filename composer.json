@@ -4,5 +4,8 @@
         "psr-4" : {
             "WPUtilities\\" : ["src/", "tests/"]
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.0.*"
     }
 }
