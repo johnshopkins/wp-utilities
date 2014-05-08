@@ -6,13 +6,13 @@ class Supertags
 {
     protected $contentTypes;
 
-    public function __construct()
+    public function __construct($contentTypes = array())
     {
         // allow for dependency injection (testing)
         $args = func_get_args();
         $args = array_shift($args);
 
-        $this->contentTypes = $args["contentTypes"];
+        $this->contentTypes = $contentTypes;
     }
 
     public function find()

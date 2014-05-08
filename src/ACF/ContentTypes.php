@@ -7,21 +7,17 @@ class ContentTypes
     protected $query;
     protected $wordpress;
 
-    public function __construct()
+    public function __construct($deps = array())
     {
-        // allow for dependency injection (testing)
-        $args = func_get_args();
-        $args = array_shift($args);
-
-        $this->wordpress = isset($args["wordpress"]) ? $args["wordpress"] : new \WPUtilities\WordPressWrapper();
-        $this->wpquery_wrapper = isset($args["wordpress_query"]) ? $args["wordpress_query"] : new \WPUtilities\WPQueryWrapper();
+        $this->wordpress = isset($deps["wordpress"]) ? $deps["wordpress"] : new \WPUtilities\WordPressWrapper();
+        $this->wpquery_wrapper = isset($deps["wordpress_query"]) ? $deps["wordpress_query"] : new \WPUtilities\WPQueryWrapper();
 
         $groups = $this->findGroups();
         $this->contentTypes = $this->assignFieldsToContentTypes($groups);
 
         $options = array("contentTypes" => $this->contentTypes);
-        $this->supertags = isset($args["acf_supertags"]) ? $args["acf_supertags"] : new Supertags($options);
-        $this->repeater = isset($args["acf_repeater"]) ? $args["acf_repeater"] : new Repeater($options);
+        $this->supertags = isset($deps["acf_supertags"]) ? $deps["acf_supertags"] : new Supertags($this->contentTypes);
+        $this->repeater = isset($deps["acf_repeater"]) ? $deps["acf_repeater"] : new Repeater($this->contentTypes);
     }
 
     /**

@@ -12,15 +12,11 @@ class Repeater
     protected $savedTypes = array();
     protected $repeaters = array();
 
-    public function __construct()
+    public function __construct($contentTypes = array(), $deps = array())
     {
-        // allow for dependency injection (testing)
-        $args = func_get_args();
-        $args = array_shift($args);
-
-        $this->contentTypes = isset($args["contentTypes"]) ? $args["contentTypes"] : array();
-        $this->wordpress = isset($args["wordpress"]) ? $args["wordpress"] : new \WPUtilities\WordPressWrapper();
-        $this->wpquery_wrapper = isset($args["wordpress_query"]) ? $args["wordpress_query"] : new \WPUtilities\WPQueryWrapper();
+        $this->contentTypes = $contentTypes;
+        $this->wordpress = isset($deps["wordpress"]) ? $deps["wordpress"] : new \WPUtilities\WordPressWrapper();
+        $this->wpquery_wrapper = isset($deps["wordpress_query"]) ? $deps["wordpress_query"] : new \WPUtilities\WPQueryWrapper();
     }
 
     /**
