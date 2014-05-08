@@ -1,5 +1,6 @@
 {
   "name": "johnshopkins/wp-utilities",
+  "version": "0.0.0",
   "autoload": {
     "psr-4" : {
       "WPUtilities\\" : ["src/", "tests/"]
