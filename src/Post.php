@@ -5,15 +5,12 @@ namespace WPUtilities;
 class Post
 {
     protected $wordpress;
+    protected $contentTypes = array();
 
-    public function __construct()
+    public function __construct($deps = array())
     {
-        // allow for dependency injection (testing)
-        $args = func_get_args();
-        $args = array_shift($args);
-        
-        $this->wordpress = isset($args["wordpress"]) ? $args["wordpress"] : new WordPressWrapper();
-        $this->contentTypes = isset($args["acf_contentTypes"]) ? $args["acf_contentTypes"] : new ACF\ContentTypes();
+        $this->wordpress = isset($deps["wordpress"]) ? $deps["wordpress"] : new WordPressWrapper();
+        $this->contentTypes = isset($deps["acf_contentTypes"]) ? $deps["acf_contentTypes"] : new ACF\ContentTypes();
     }
 
     public function getMeta($id, $postType)
