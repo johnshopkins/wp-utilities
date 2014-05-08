@@ -4,16 +4,32 @@ namespace WPUtilities;
 
 class API
 {
-    public static function getApiBase($env = null)
-    {
-        $env = is_null($env) ? ENV : $env;
+  
+  protected $http;
+  protected $apiBase;
 
-        $prefix = "";
+  public function __construct($deps = array())
+  {
+    $this->http = isset($deps["http"]) ? $deps["http"] : new \HttpExchange\Adapters\Resty(new \Resty());
+    $this->apiBase = isset($deps["apiBase"]) ? $deps["apiBase"] : \WPUtilities\API::getApiBase();
+  }
 
-        if ($env != "production") {
-            $prefix = $env . ".";
-        }
-        
-        return "http://{$prefix}jhu.edu/api";
+  public static function getApiBase($env = null)
+  {
+    $env = is_null($env) ? ENV : $env;
+
+    $prefix = "";
+
+    if ($env != "production") {
+      $prefix = $env . ".";
     }
+
+    return "http://{$prefix}jhu.edu/api";
+  }
+
+  public function get($endpoint)
+  {
+    return $this->http->get($this->apiBase . $endpoint)->getBody();
+  }
+
 }
