@@ -27,9 +27,9 @@ class API
     return "http://{$prefix}jhu.edu/api";
   }
 
-  public function get($endpoint)
+  public function get($endpoint, $params = array())
   {
-    return $this->http->get($this->apiBase . $endpoint)->getBody();
+    return $this->http->get($this->apiBase . $endpoint, $params)->getBody();
   }
 
 }
