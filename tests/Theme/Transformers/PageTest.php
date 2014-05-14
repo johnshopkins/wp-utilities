@@ -46,8 +46,8 @@ class PageTest extends \WPUtilities\BaseTest
     $api->expects($this->any())
       ->method("get")
       ->will($this->returnValueMap(array(
-        array("/10", $object10),
-        array("/20", $object20),
+        array("/10", array(), $object10),
+        array("/20", array(), $object20),
       )));
 
     return $api;
