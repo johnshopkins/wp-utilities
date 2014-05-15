@@ -9,7 +9,8 @@ class BaseTest extends \WPUtilities\BaseTest
   {
     $this->testClass = new Base(array(
       "api" => $this->getApi(),
-      "postUtil" => $this->getPostUtil()
+      "postUtil" => $this->getPostUtil(),
+      "contentTypes" => $this->getContentTypes()
     ));
     parent::setup();
   }
@@ -50,6 +51,15 @@ class BaseTest extends \WPUtilities\BaseTest
       ->will($this->returnValue("meta"));
 
     return $postUtil;
+  }
+
+  protected function getContentTypes()
+  {   
+    $contentTypes = $this->getMockBuilder("\\WPUtilities\\ACF\\ContentTypes")
+      ->disableOriginalConstructor()
+      ->getMock();
+
+    return $contentTypes;
   }
 
 }

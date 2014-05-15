@@ -9,7 +9,8 @@ class PageTest extends \WPUtilities\BaseTest
   {
     $this->testClass = new Page(array(
       "api" => $this->getApi(),
-      "postUtil" => $this->getPostUtil()
+      "postUtil" => $this->getPostUtil(),
+      "contentTypes" => $this->getContentTypes()
     ));
     parent::setup();
   }
@@ -60,6 +61,15 @@ class PageTest extends \WPUtilities\BaseTest
       ->getMock();
 
     return $postUtil;
+  }
+
+  protected function getContentTypes()
+  {   
+    $contentTypes = $this->getMockBuilder("\\WPUtilities\\ACF\\ContentTypes")
+      ->disableOriginalConstructor()
+      ->getMock();
+
+    return $contentTypes;
   }
 
 }
