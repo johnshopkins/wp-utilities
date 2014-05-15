@@ -115,11 +115,14 @@ class Supertags
         // supertags on this content type
         $supertags = $this->supertags[$type];
 
+        // print_r($meta);
+        // print_r($supertags); die();
+
         foreach ($meta as $k => $v) {
 
             if (!in_array($k, array_keys($supertags))) {
                 // not a supertag field
-                return;
+                continue;
             }
 
             $supertagFieldDetails = $supertags[$k];            
