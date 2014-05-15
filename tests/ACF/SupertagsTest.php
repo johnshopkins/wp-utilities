@@ -82,9 +82,9 @@ class SupertagsTest extends \WPUtilities\BaseTest
         parent::setup();
     }
 
-    public function testFind()
+    public function testFindRelationships()
     {
-        $result = $this->testClass->find();
+        $result = $this->testClass->findRelationships();
 
         $expected = array(
             "post" => array(

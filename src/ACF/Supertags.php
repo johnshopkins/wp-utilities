@@ -6,16 +6,23 @@ class Supertags
 {
     protected $contentTypes = array();
     protected $supertags = array();
+    protected $relationships = array();
 
     public function __construct($deps = array())
     {
         $this->contentTypes = isset($deps["contentTypes"]) ? $deps["contentTypes"] : array();
         $this->compile();
+
     }
 
     public function find()
     {
         return $this->supertags;
+    }
+
+    public function findRelationships()
+    {
+        return $this->relationships;
     }
 
     /**
@@ -42,7 +49,7 @@ class Supertags
     {  
         foreach($this->contentTypes as $type => $fields) {
 
-            $this->supertags[$type] = array();
+            $this->relationships[$type] = array();
 
             foreach ($fields as $field) {
 
@@ -77,12 +84,19 @@ class Supertags
 
         foreach ($field["vocabs"] as $vocab) {
 
-            $this->supertags[$type][$vocab][] = array(
+            $this->relationships[$type][$vocab][] = array(
                 "name" => $field["name"],
                 "multiple" => $field["multiple"],
                 "parent" => $parent,
                 "onlyChild" => $onlyChild
             );
+
+            if ($parent) {
+                $this->supertags[$type][$parent]["children"][$field["name"]] = $field;
+            } else {
+                $this->supertags[$type][$field["name"]] = $field;
+            }
+            
         }
     }
 
@@ -97,75 +111,57 @@ class Supertags
      */
     public function cleanMeta($meta, $type)
     {
-        foreach ($this->supertags[$type] as $contentType) {
+        // supertags on this content type
+        $supertags = $this->supertags[$type];
 
-            foreach ($contentType as $supertagField) {
+        foreach ($meta as $k => &$v) {
 
-                // if this field allows multiple values, it's good to go
-                if ($supertagField["multiple"]) continue;
+            if (!in_array($k, array_keys($supertags))) {
+                // not a supertag field
+                return;
+            }
 
-                $supertagName = $supertagField["name"];
-                $parent = $supertagField["parent"];
+            $supertagFieldDetails = $supertags[$k];            
 
+            if (isset($supertagFieldDetails["children"])) {
 
-                if (!$parent) {
-                    // top-level supertag
-                    $meta[$supertagName] = array_shift($meta[$supertagName]);
-                    continue;
-                }
+                // this is a repeater field that has supertag
+                // field(s) on it
 
+                $children = $supertagFieldDetails["children"];
 
-                // supertag as a subfield of a repeater
-                $parent = $supertagField["parent"];
+                if (count($children) == 1) {
 
-                if ($supertagField["onlyChild"]) {
+                    $child = array_shift($children);
 
-                    // there is only one subfield to this repeater:
-                    // array(
-                    //  array(1234),    // subfield
-                    //  array(2345)     // subfield
-                    // )
-
-                    $meta[$parent] = array_map(function ($v) {
-                        return array_shift($v);
-                    }, $meta[$parent]);
+                    if ($child["multiple"]) continue;
+                    
+                    $v = array_map(function ($value) {
+                        return array_shift($value);
+                    }, $v);
 
                 } else {
 
-                    // there are multiple subfields to this repeater:
-                    
-                    // array(
-                    //  array(
-                    //      "someField" => array(1234),
-                    //      "anotherField" => array(1234)
-                    //  ),
-                    //  array(
-                    //      "someField" => array(5678),
-                    //      "anotherField" => array(5678)
-                    //  )
+                    // $v = array(
+                    //     "subFieldName" => array(
+                    //         1234
+                    //     )
                     // )
 
-                    // print_r($meta[$parent]);
+                    foreach ($v as &$childField) {
 
-
-                    // this is flawed
-                    // 
-                    $meta[$parent] = array_map(function ($v) use ($supertagName) {
-                        
-                        foreach ($v as $type => $data) {
-
-                            if ($type == $supertagName) {
-                                $v[$supertagName] = array_shift($v[$supertagName]);
-                            }
-
+                        foreach ($childField as $subFieldName => &$value) {
+                            if ($children[$subFieldName]["multiple"]) continue;
+                            $value = array_shift($value);
                         }
 
-                        return $v;
 
-                    }, $meta[$parent]);
-
+                    }
                 }
 
+            } else {
+                if ($supertagFieldDetails["multiple"]) continue;
+                $meta[$k] = array_shift($v);
             }
 
         }

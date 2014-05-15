@@ -71,6 +71,11 @@ class ContentTypes
         return $this->supertags->find();
     }
 
+    public function findRelationships()
+    {
+        return $this->supertags->findRelationships();
+    }
+
     /**
      * Query the database to find all field groups
      * created by ACF.
