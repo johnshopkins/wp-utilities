@@ -42,11 +42,6 @@ class ContentTypes
         $this->repeater = isset($deps["acf_repeater"]) ? $deps["acf_repeater"] : new Repeater($this->contentTypes);
     }
 
-    /**
-     * Find all WordPress content types and
-     * their associatied ACF fields.
-     * @return array
-     */
     public function find()
     {
         return $this->contentTypes;
@@ -72,6 +67,11 @@ class ContentTypes
         return $this->supertags->find();
     }
 
+    /**
+     * Query the database to find all field groups
+     * created by ACF.
+     * @return array
+     */
     protected function findGroups()
     {
         $params = array("post_type" => "acf", "posts_per_page" => -1);
@@ -80,6 +80,11 @@ class ContentTypes
         return $this->findGroupMeta($groups->posts);
     }
 
+    /**
+     * Return field groups with the addition of meta data.
+     * @param  array $groups Field groups
+     * @return array Field groups with meta data
+     */
     protected function findGroupMeta($groups)
     {
         return array_filter(array_map(function ($fieldGroup) {
