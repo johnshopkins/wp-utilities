@@ -107,14 +107,25 @@ class ContentTypes
         }, $groups));
     }
 
+    /**
+     * Loop through groups of fields and assign the associated
+     * fields to the right post type based on the field group's
+     * rules.
+     *
+     * Currently, this function only supports
+     * "post_type" == {post_type} rules.
+     * 
+     * @param  array $fieldGroups Field groups
+     * @return array Post types and associated fields
+     */
     protected function assignFieldsToContentTypes($fieldGroups)
-    {
+    {   
+        // find all post types
         $postTypes = $this->wordpress->get_post_types(array("public" => true));
-        $types = $postTypes;
 
         foreach ($postTypes as $type) {
 
-            $types[$type] = array();
+            $postTypes[$type] = array();
 
             foreach ($fieldGroups as $fieldGroup) {
 
@@ -124,14 +135,11 @@ class ContentTypes
                         continue;
                     }
 
-                    switch ($rule["operator"]) {
-                        case "==":
-                            if ($type == $rule["value"]) {
+                    if ($rule["operator"] == "==" && $type == $rule["value"]) {
 
-                                foreach ($fieldGroup["fields"] as $field) {
-                                    $types[$type][] = $field;
-                                }
-                            }
+                        foreach ($fieldGroup["fields"] as $field) {
+                            $postTypes[$type][] = $field;
+                        }
                     }
 
                 }
@@ -140,6 +148,6 @@ class ContentTypes
 
         }
 
-        return $types;
+        return $postTypes;
     }
 }
