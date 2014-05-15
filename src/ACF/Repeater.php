@@ -12,9 +12,9 @@ class Repeater
     protected $savedTypes = array();
     protected $repeaters = array();
 
-    public function __construct($contentTypes = array(), $deps = array())
+    public function __construct($deps = array())
     {
-        $this->contentTypes = $contentTypes;
+        $this->contentTypes = isset($deps["contentTypes"]) ? $deps["contentTypes"] : array();
         $this->wordpress = isset($deps["wordpress"]) ? $deps["wordpress"] : new \WPUtilities\WordPressWrapper();
         $this->wpquery_wrapper = isset($deps["wordpress_query"]) ? $deps["wordpress_query"] : new \WPUtilities\WPQueryWrapper();
     }

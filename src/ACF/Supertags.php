@@ -7,9 +7,9 @@ class Supertags
     protected $contentTypes = array();
     protected $supertags = array();
 
-    public function __construct($contentTypes = array())
+    public function __construct($deps = array())
     {
-        $this->contentTypes = $contentTypes;
+        $this->contentTypes = isset($deps["contentTypes"]) ? $deps["contentTypes"] : array();
         $this->compile();
     }
 

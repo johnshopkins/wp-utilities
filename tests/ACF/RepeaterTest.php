@@ -66,7 +66,8 @@ class RepeaterTest extends \WPUtilities\BaseTest
             )
         );
 
-        $this->testClass = new Repeater($contentTypes, array(
+        $this->testClass = new Repeater(array(
+            "contentTypes" => $contentTypes,
             "wordpress" => $this->getWordPress(),
             "wordpress_query" => $this->getWordPressQuery()
         ));

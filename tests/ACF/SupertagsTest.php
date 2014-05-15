@@ -75,7 +75,9 @@ class SupertagsTest extends \WPUtilities\BaseTest
             )
         );
 
-        $this->testClass = new Supertags($contentTypes);
+        $this->testClass = new Supertags(array(
+            "contentTypes" => $contentTypes
+        ));
 
         parent::setup();
     }

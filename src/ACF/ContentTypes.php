@@ -28,6 +28,7 @@ class ContentTypes
 {
     protected $query;
     protected $wordpress;
+    protected $contentTypes;
 
     public function __construct($deps = array())
     {
@@ -38,8 +39,8 @@ class ContentTypes
         $this->contentTypes = $this->assignFieldsToContentTypes($groups);
 
         $options = array("contentTypes" => $this->contentTypes);
-        $this->supertags = isset($deps["acf_supertags"]) ? $deps["acf_supertags"] : new Supertags($this->contentTypes);
-        $this->repeater = isset($deps["acf_repeater"]) ? $deps["acf_repeater"] : new Repeater($this->contentTypes);
+        $this->supertags = isset($deps["acf_supertags"]) ? $deps["acf_supertags"] : new Supertags($options);
+        $this->repeater = isset($deps["acf_repeater"]) ? $deps["acf_repeater"] : new Repeater($options);
     }
 
     public function find()
