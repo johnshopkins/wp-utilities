@@ -111,10 +111,11 @@ class Supertags
      */
     public function cleanMeta($meta, $type)
     {
+        // print_r($meta); die();
         // supertags on this content type
         $supertags = $this->supertags[$type];
 
-        foreach ($meta as $k => &$v) {
+        foreach ($meta as $k => $v) {
 
             if (!in_array($k, array_keys($supertags))) {
                 // not a supertag field
@@ -136,9 +137,9 @@ class Supertags
 
                     if ($child["multiple"]) continue;
                     
-                    $v = array_map(function ($value) {
+                    $meta[$k] = array_map(function ($value) {
                         return array_shift($value);
-                    }, $v);
+                    }, $meta[$k]);
 
                 } else {
 
@@ -148,11 +149,11 @@ class Supertags
                     //     )
                     // )
 
-                    foreach ($v as &$childField) {
+                    foreach ($v as $index => $childField) {
 
-                        foreach ($childField as $subFieldName => &$value) {
+                        foreach ($childField as $subFieldName => $value) {
                             if ($children[$subFieldName]["multiple"]) continue;
-                            $value = array_shift($value);
+                            $meta[$k][$index][$subFieldName] = array_shift($value);
                         }
 
 
@@ -161,7 +162,7 @@ class Supertags
 
             } else {
                 if ($supertagFieldDetails["multiple"]) continue;
-                $meta[$k] = array_shift($v);
+                $meta[$k] = array_shift($meta[$k]);
             }
 
         }
