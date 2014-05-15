@@ -55,7 +55,10 @@ class ContentTypes
      */
     public function cleanMeta($meta, $postType)
     {
-        return $this->repeater->cleanMeta($meta, $postType);
+        $meta = $this->repeater->cleanMeta($meta, $postType);
+        $meta = $this->supertags->cleanMeta($meta, $postType);
+
+        return $meta;
     }
 
     /**
