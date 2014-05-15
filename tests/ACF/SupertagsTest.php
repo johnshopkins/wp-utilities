@@ -81,23 +81,31 @@ class SupertagsTest extends \WPUtilities\BaseTest
                 "profile" => array(
                     array(
                         "name" => "connections",
-                        "multiple" => 1
+                        "multiple" => 1,
+                        "parent" => null,
+                        "onlyChild" => false
                     ),
                     array(
                         "name" => "profile",
-                        "multiple" => 0
+                        "multiple" => 0,
+                        "parent" => null,
+                        "onlyChild" => false
                     )
                 ),
                 "person" => array(
                     array(
                         "name" => "connections",
-                        "multiple" => 1
+                        "multiple" => 1,
+                        "parent" => null,
+                        "onlyChild" => false
                     )
                 ),
                 "location" => array(
                     array(
                         "name" => "connections",
-                        "multiple" => 1
+                        "multiple" => 1,
+                        "parent" => null,
+                        "onlyChild" => false
                     )
                 )
             )
