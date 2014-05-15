@@ -2,6 +2,28 @@
 
 namespace WPUtilities\ACF;
 
+/**
+ * Creates an array of post types and thier associated fields. Each field has
+ * data about its properties.
+ *
+ * We use Advanced Custom Fields [http://www.advancedcustomfields.com/] to manage
+ * content types within WordPress. Whether it is an advantage or disdvantage, ACF
+ * manages fields in Field Groups that can then be assigned to a post type.
+ * Because of this, theres isn't an easy way to get all the fields assigned to a
+ * particular field type.
+ *
+ * ACF stores the meta data for some fields (mainly repeater fields) in a strange,
+ * unreadable way. You can use ACF functions to normalize the data, but since we
+ * import a lot of our data, the ACF functions are useless to us (long story...).
+ *
+ * So we need to take it upon ourselves to clean this data. For this reason, we
+ * need to know which fields are assigned to the particular kind of post type we
+ * are cleaning up. Knowing the fields, we can find which fields are repeaters and
+ * supertags and clean them appropiatly. Previously, we were looking at context
+ * clues to see which fields were which, which didn't work out too well.
+ * 
+ */
+
 class ContentTypes
 {
     protected $query;
