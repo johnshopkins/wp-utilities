@@ -147,7 +147,7 @@ class ContentTypes
                     if ($rule["operator"] == "==" && $type == $rule["value"]) {
 
                         foreach ($fieldGroup["fields"] as $field) {
-                            $postTypes[$type][] = $field;
+                            $postTypes[$type][$field["name"]] = $field;
                         }
                     }
 

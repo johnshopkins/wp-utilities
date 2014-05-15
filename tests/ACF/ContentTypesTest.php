@@ -57,7 +57,8 @@ class ContentTypesTest extends \WPUtilities\BaseTest
             "notField" => "notField",
             "field_123" => array(
                 serialize(array(
-                    "type" => "notSupertags"
+                    "type" => "notSupertags",
+                    "name" => "not_supertags"
                 ))
             ),
             "field_456" => array(
@@ -90,18 +91,19 @@ class ContentTypesTest extends \WPUtilities\BaseTest
             array(
                 "rules" => $rules,
                 "fields" => array(
-                    array(
+                    "not_supertags" => array(
+                        "name" => "not_supertags",
                          "type" => "notSupertags"
                     ),
-                    array(
-                        "type" => "supertags",
+                    "campus_stuff" => array(
                         "name" => "campus_stuff",
+                        "type" => "supertags",
                         "vocabs" => array("location", "division"),
                         "multiple" => 1
                     ),
-                    array(
-                        "type" => "supertags",
+                    "campus_location" => array(
                         "name" => "campus_location",
+                        "type" => "supertags",
                         "vocabs" => array("location"),
                         "multiple" => 0
                     )
