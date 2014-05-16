@@ -146,46 +146,6 @@ class SupertagsTest extends \WPUtilities\BaseTest
         $this->assertEquals($expected, $result);
     }
 
-    public function testCleanMeta()
-    {
-        $given = array(
-            "main_content" => array(
-                array(10420)
-            ),
-            "some_more_content" => array(
-                array(
-                    "text" => array(10420, 10455),
-                    "some_location" => array(7966)
-                ),
-                array(
-                    "text" => array(10420),
-                    "some_location" => array(7966)
-                )
-            ),
-            "connections" => array(1234, 456),
-            "profile" => array(1234)
-
-        );
-        $expected = array(
-            "main_content" => array(10420),
-            "some_more_content" => array(
-                array(
-                    "text" => array(10420, 10455),
-                    "some_location" => 7966
-                ),
-                array(
-                    "text" => array(10420),
-                    "some_location" => 7966
-                )
-            ),
-            "connections" => array(1234, 456),
-            "profile" => 1234
-        );
-
-        $result = $this->testClass->cleanMeta($given, "post");
-        $this->assertEquals($expected, $result);
-    }
-
     protected function getContentTypes()
     {   
         $contentTypes = $this->getMockBuilder("\\WPUtilities\\ACF\\ContentTypes")
