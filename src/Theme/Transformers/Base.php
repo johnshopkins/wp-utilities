@@ -10,27 +10,15 @@ class Base
    */
   protected $api;
 
-  /**
-   * WPUtilities\Post
-   * @var object
-   */
-  protected $postUtil;
-
   public function __construct($deps = array())
   {
     $this->api = isset($deps["api"]) ? $deps["api"] : new \WPUtilities\API();
-    $this->postUtil = isset($deps["postUtil"]) ? $deps["postUtil"] : new \WPUtilities\Post();
+    $this->contentTypes = isset($deps["contentTypes"]) ? $deps["contentTypes"] : new \WPUtilities\ACF\ContentTypes();
   }
 
-  /**
-   * Add nicely formatted metadata to a given post.
-   * @param object $post Post object
-   * @return object Post obejct
-   */
-  public function addMeta($post)
+  public function getPost($id)
   {
-    $post->meta = $this->postUtil->getMeta($post->ID, $post->post_type);
-    return $post;
+    return $this->api->get("/{$id}")->data;
   }
 
 }
