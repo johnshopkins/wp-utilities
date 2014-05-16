@@ -29,7 +29,11 @@ class API
 
   public function get($endpoint, $params = array())
   {
-    return $this->http->get($this->apiBase . $endpoint, $params)->getBody();
+    if (substr($endpoint, 0, strlen($this->apiBase)) != $this->apiBase) {
+      $endpoint = $this->apiBase . $endpoint;
+    }
+
+    return $this->http->get($endpoint, $params)->getBody();
   }
 
 }
