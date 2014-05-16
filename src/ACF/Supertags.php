@@ -50,6 +50,7 @@ class Supertags
         foreach($this->contentTypes as $type => $fields) {
 
             $this->relationships[$type] = array();
+            $this->supertags[$type] = array();
 
             foreach ($fields as $field) {
 
