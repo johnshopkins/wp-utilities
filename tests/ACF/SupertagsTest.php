@@ -150,8 +150,7 @@ class SupertagsTest extends \WPUtilities\BaseTest
     {
         $given = array(
             "main_content" => array(
-                array(10420),
-                array(8712)
+                array(10420)
             ),
             "some_more_content" => array(
                 array(
@@ -168,7 +167,7 @@ class SupertagsTest extends \WPUtilities\BaseTest
 
         );
         $expected = array(
-            "main_content" => array(10420, 8712),
+            "main_content" => array(10420),
             "some_more_content" => array(
                 array(
                     "text" => array(10420, 10455),
