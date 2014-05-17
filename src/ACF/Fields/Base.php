@@ -18,12 +18,10 @@ class Base
 
   public function assemble($meta)
   {
-    $meta = array(
-      $this->fieldName => $meta[$this->fieldName]
-    );
-    
-    $this->usedKeys[] = $this->fieldName;
+    $currentValue = isset($meta[$this->fieldName]) ? $meta[$this->fieldName] : null;
 
-    return $meta;
+    return array(
+      $this->fieldName => $currentValue
+    );
   }
 }

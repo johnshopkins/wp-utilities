@@ -14,18 +14,15 @@ class supertags extends Base
 
   public function assemble($meta)
   {
-    $apiUrl = \WordPressAPI\App::$baseUrl;
+    $currentValue = isset($meta[$this->fieldName]) ? $meta[$this->fieldName] : array();
+
+    $apiUrl = \WPUtilities\API::getApiBase();
     $value = array_map(function ($id) use ($apiUrl) {
       return "{$apiUrl}/{$id}/";
-    }, $meta[$this->fieldName]);
+    }, $currentValue);
 
-
-    $meta = array(
+    return array(
       $this->fieldName => $this->multiple ? $value : array_shift($value)
     );
-    
-    $this->usedKeys[] = $this->fieldName;
-
-    return $meta;
   }
 }
