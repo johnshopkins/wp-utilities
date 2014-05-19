@@ -82,15 +82,6 @@ class ContentTypes
         return array_merge($meta, $cleanedMeta);
     }
 
-    /**
-     * Find all supertag fields in all content types
-     * @return array
-     */
-    public function findSupertags()
-    {
-        return $this->supertags->find();
-    }
-
     public function findRelationships()
     {
         return $this->supertags->findRelationships();

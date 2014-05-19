@@ -15,11 +15,6 @@ class Supertags
 
     }
 
-    public function find()
-    {
-        return $this->supertags;
-    }
-
     public function findRelationships()
     {
         return $this->relationships;
@@ -50,7 +45,6 @@ class Supertags
         foreach($this->contentTypes as $type => $fields) {
 
             $this->relationships[$type] = array();
-            $this->supertags[$type] = array();
 
             foreach ($fields as $field) {
 
@@ -92,14 +86,6 @@ class Supertags
                 "onlyChild" => $onlyChild
             );
             
-        }
-
-        if ($parent && $onlyChild) {
-            $this->supertags[$type][$parent] = $field;
-        } else if ($parent) {
-            $this->supertags[$type][$parent]["children"][$field["name"]] = $field;
-        } else {
-            $this->supertags[$type][$field["name"]] = $field;
         }
     }
 

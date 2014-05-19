@@ -62,7 +62,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                 "http://local.jhu.edu/api/5678/"
             ),
             "supertag_single_content" => "http://local.jhu.edu/api/1234/",
-            "profile_image" => 1234,
+            "profile_image" => "http://local.jhu.edu/api/1234/",
             "hobbies" => array("Baseball", "Football"),
             "people" => array(
                 "http://local.jhu.edu/api/1234/"
@@ -369,53 +369,6 @@ class ContentTypesTest extends \WPUtilities\BaseTest
         );
 
         $result = $this->testClass->findRelationships();
-        $this->assertEquals($expected, $result);
-    }
-
-    public function testFindSupertags()
-    {
-        $expected = array(
-            "post" => array(
-                "supertag_multi_content" => array(
-                    "type" => "supertags",
-                    "name" => "supertag_multi_content",
-                    "vocabs" => array("block", "field_of_study"),
-                    "multiple" => 1
-                ),
-                "supertag_single_content" => array(
-                    "type" => "supertags",
-                    "name" => "supertag_single_content",
-                    "vocabs" => array("location"),
-                    "multiple" => 0
-                ),
-                "people" => array(
-                    "children" => array(
-                        "person" => array(
-                            "type" => "supertags",
-                            "name" => "person",
-                            "vocabs" => array("person"),
-                            "multiple" => 0
-                        )
-                    )
-                ),
-                "location_ratings" => array(
-                    "children" => array(
-                        "location" => array(
-                            "type" => "supertags",
-                            "name" => "location",
-                            "vocabs" => array("location"),
-                            "multiple" => 0
-                        )
-                    )
-                )
-                
-                
-
-            ),
-            "page" => array()
-        );
-        
-        $result = $this->testClass->findSupertags();
         $this->assertEquals($expected, $result);
     }
 
