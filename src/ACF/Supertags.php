@@ -91,13 +91,15 @@ class Supertags
                 "parent" => $parent,
                 "onlyChild" => $onlyChild
             );
-
-            if ($parent) {
-                $this->supertags[$type][$parent]["children"][$field["name"]] = $field;
-            } else {
-                $this->supertags[$type][$field["name"]] = $field;
-            }
             
+        }
+
+        if ($parent && $onlyChild) {
+            $this->supertags[$type][$parent] = $field;
+        } else if ($parent) {
+            $this->supertags[$type][$parent]["children"][$field["name"]] = $field;
+        } else {
+            $this->supertags[$type][$field["name"]] = $field;
         }
     }
 
