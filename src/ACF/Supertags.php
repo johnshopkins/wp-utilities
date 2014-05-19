@@ -91,87 +91,16 @@ class Supertags
                 "parent" => $parent,
                 "onlyChild" => $onlyChild
             );
-
-            if ($parent) {
-                $this->supertags[$type][$parent]["children"][$field["name"]] = $field;
-            } else {
-                $this->supertags[$type][$field["name"]] = $field;
-            }
             
         }
-    }
 
-    /**
-     * Cleans metadata of supertag fields that only allow one
-     * value. All supertag data is stored as an array, even
-     * if only one value is allowed. This function finds those
-     * needless arrays and pops the data out.
-     * @param  array  $meta Metadata
-     * @param  string $type Post type
-     * @return array Cleaned meta
-     */
-    public function cleanMeta($meta, $type)
-    {
-        // print_r($meta); die();
-        // supertags on this content type
-        $supertags = $this->supertags[$type];
-
-        // print_r($meta);
-        // print_r($supertags); die();
-
-        foreach ($meta as $k => $v) {
-
-            if (!in_array($k, array_keys($supertags))) {
-                // not a supertag field
-                continue;
-            }
-
-            $supertagFieldDetails = $supertags[$k];            
-
-            if (isset($supertagFieldDetails["children"])) {
-
-                // this is a repeater field that has supertag
-                // field(s) on it
-
-                $children = $supertagFieldDetails["children"];
-
-                if (count($children) == 1) {
-
-                    $child = array_shift($children);
-
-                    if ($child["multiple"]) continue;
-                    
-                    $meta[$k] = array_map(function ($value) {
-                        return array_shift($value);
-                    }, $meta[$k]);
-
-                } else {
-
-                    // $v = array(
-                    //     "subFieldName" => array(
-                    //         1234
-                    //     )
-                    // )
-
-                    foreach ($v as $index => $childField) {
-
-                        foreach ($childField as $subFieldName => $value) {
-                            if ($children[$subFieldName]["multiple"]) continue;
-                            $meta[$k][$index][$subFieldName] = array_shift($value);
-                        }
-
-
-                    }
-                }
-
-            } else {
-                if ($supertagFieldDetails["multiple"]) continue;
-                $meta[$k] = array_shift($meta[$k]);
-            }
-
+        if ($parent && $onlyChild) {
+            $this->supertags[$type][$parent] = $field;
+        } else if ($parent) {
+            $this->supertags[$type][$parent]["children"][$field["name"]] = $field;
+        } else {
+            $this->supertags[$type][$field["name"]] = $field;
         }
-
-        return $meta;
     }
 
 }

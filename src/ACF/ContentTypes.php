@@ -40,7 +40,6 @@ class ContentTypes
 
         $options = array("contentTypes" => $this->contentTypes);
         $this->supertags = isset($deps["acf_supertags"]) ? $deps["acf_supertags"] : new Supertags($options);
-        $this->repeater = isset($deps["acf_repeater"]) ? $deps["acf_repeater"] : new Repeater($options);
     }
 
     public function find()
@@ -50,16 +49,37 @@ class ContentTypes
 
     /**
      * Clean metadata of all ACF weirdness
-     * @param  array  $meta
-     * @param  string $postType
+     * @param  array  $meta Metadata
+     * @param  string $type Post type
      * @return array
      */
-    public function cleanMeta($meta, $postType)
+    public function cleanMeta($meta, $type)
     {
-        $meta = $this->repeater->cleanMeta($meta, $postType);
-        $meta = $this->supertags->cleanMeta($meta, $postType);
+        $fields = $this->contentTypes[$type];
+        $cleanedMeta = array();
 
-        return $meta;
+        foreach ($fields as $field) {
+
+            $type = $field['type'];
+
+            $className = "\\WPUtilities\\ACF\\Fields\\{$type}";
+            $className = class_exists($className) ? $className : "\\WPUtilities\\ACF\\Fields\\Base";
+
+            $fieldHelper = new $className($field);
+            
+            // using the given meta, assemble together the field
+            $newMeta = $fieldHelper->assemble($meta);
+
+            // merge the new meta with the rest of the cleanedMeta
+            $cleanedMeta = array_merge($cleanedMeta, $newMeta);
+
+            // remove used keys from original meta
+            foreach ($fieldHelper->usedKeys as $key) {
+                unset($meta[$key]);
+            }
+        }
+        
+        return array_merge($meta, $cleanedMeta);
     }
 
     /**

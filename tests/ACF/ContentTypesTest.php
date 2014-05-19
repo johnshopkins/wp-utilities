@@ -27,11 +27,69 @@ class ContentTypesTest extends \WPUtilities\BaseTest
         $result = $this->testClass->find();
 
         $expected = array(
-            "person" => $this->cleanedFieldGroups[0]["fields"],
-            "something_else" => $this->cleanedFieldGroups[0]["fields"],
-            "noAcfFields" => array()
+            "post" => $this->cleanedFieldGroups[0]["fields"],
+            "page" => array()
         );
 
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testCleanMeta()
+    {
+        $given = array(
+            "first_name" => "jen",
+            "supertag_multi_content" => array(1234, 5678),
+            "supertag_single_content" => array(1234),
+            "profile_image" => 1234,
+            "hobbies_0_hobby" => "Baseball",
+            "hobbies_1_hobby" => "Football",
+            "people_0_person" => array(1234),
+            "location_ratings_0_location" => array(1234),
+            "location_ratings_0_rating" => "5 stars",
+            "location_ratings_1_location" => array(5678),
+            "location_ratings_1_rating" => "4 stars",
+            "names_0_first_name" => "jen",
+            "names_0_last_name" => "wachter",
+            "names_1_first_name" => "jane",
+            "names_1_last_name" => "doe"
+
+
+        );
+        $expected = array(
+            "first_name" => "jen",
+            "supertag_multi_content" => array(
+                "http://local.jhu.edu/api/1234/",
+                "http://local.jhu.edu/api/5678/"
+            ),
+            "supertag_single_content" => "http://local.jhu.edu/api/1234/",
+            "profile_image" => 1234,
+            "hobbies" => array("Baseball", "Football"),
+            "people" => array(
+                "http://local.jhu.edu/api/1234/"
+            ),
+            "location_ratings" => array(
+                array(
+                    "location" => "http://local.jhu.edu/api/1234/",
+                    "rating" => "5 stars"
+                ),
+                array(
+                    "location" => "http://local.jhu.edu/api/5678/",
+                    "rating" => "4 stars"
+                )
+            ),
+            "names" => array(
+                array(
+                    "first_name" => "jen",
+                    "last_name" => "wachter"
+                ),
+                array(
+                    "first_name" => "jane",
+                    "last_name" => "doe"
+                )
+            )
+        );
+
+        $result = $this->testClass->cleanMeta($given, "post");
         $this->assertEquals($expected, $result);
     }
 
@@ -41,12 +99,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
             array(
                 "param" => "post_type",
                 "operator" => "==",
-                "value" => "person"
-            ),
-            array(
-                "param" => "post_type",
-                "operator" => "==",
-                "value" => "something_else"
+                "value" => "post"
             ),
             array(
                 "param" => "not_post_type"
@@ -54,29 +107,114 @@ class ContentTypesTest extends \WPUtilities\BaseTest
         );
 
         $this->wordpress_meta = array(
-            "notField" => "notField",
-            "field_123" => array(
+
+            // some other meta, not a field
+            "not_a_field" => "not_a_field",
+
+            // standard text
+            "field_5376326d599df" => array(
                 serialize(array(
-                    "type" => "notSupertags",
-                    "name" => "not_supertags"
+                    "type" => "text",
+                    "name" => "first_name"
                 ))
             ),
-            "field_456" => array(
+
+            // supertags (multiple)
+            "field_5376326d599da" => array(
                 serialize(array(
                     "type" => "supertags",
-                    "name" => "campus_stuff",
-                    "vocabs" => array("location", "division"),
+                    "name" => "supertag_multi_content",
+                    "vocabs" => array("block", "field_of_study"),
                     "multiple" => 1
                 ))
             ),
-            "field_789" => array(
+
+            // supertags (single)
+            "field_5376326d5991b" => array(
                 serialize(array(
                     "type" => "supertags",
-                    "name" => "campus_location",
+                    "name" => "supertag_single_content",
                     "vocabs" => array("location"),
                     "multiple" => 0
                 ))
             ),
+
+            // file
+            "field_5376326d5995b" => array(
+                serialize(array(
+                    "type" => "file",
+                    "name" => "profile_image"
+                ))
+            ),
+
+            // repeater (one subfield)
+            "field_5376326d5997b" => array(
+                serialize(array(
+                    "type" => "repeater",
+                    "name" => "hobbies",
+                    "sub_fields" => array(
+                        array(
+                            "type" => "text",
+                            "name" => "hobby"
+                        )
+                    )
+                ))
+            ),
+
+            // repeater (one subfield as supertag)
+            "field_5376326d5993b" => array(
+                serialize(array(
+                    "type" => "repeater",
+                    "name" => "people",
+                    "sub_fields" => array(
+                        array(
+                            "type" => "supertags",
+                            "name" => "person",
+                            "vocabs" => array("person"),
+                            "multiple" => 0
+                        )
+                    )
+                ))
+            ),
+
+            // repeater (multiple subfields, one as supertag)
+            "field_5376326d5992b" => array(
+                serialize(array(
+                    "type" => "repeater",
+                    "name" => "location_ratings",
+                    "sub_fields" => array(
+                        array(
+                            "type" => "supertags",
+                            "name" => "location",
+                            "vocabs" => array("location"),
+                            "multiple" => 0
+                        ),
+                        array(
+                            "type" => "text",
+                            "name" => "rating"
+                        )
+                    )
+                ))
+            ),
+
+            // repeater (multiple subfields)
+            "field_5376326d594db" => array(
+                serialize(array(
+                    "type" => "repeater",
+                    "name" => "names",
+                    "sub_fields" => array(
+                        array(
+                            "type" => "text",
+                            "name" => "first_name"
+                        ),
+                        array(
+                            "type" => "text",
+                            "name" => "last_name"
+                        )
+                    )
+                ))
+            ),
+            
             "rule" => array_map(function ($rule) {
                 return serialize($rule);
             }, $rules)
@@ -91,25 +229,194 @@ class ContentTypesTest extends \WPUtilities\BaseTest
             array(
                 "rules" => $rules,
                 "fields" => array(
-                    "not_supertags" => array(
-                        "name" => "not_supertags",
-                         "type" => "notSupertags"
+
+                    // standard text
+                    "first_name" => array(
+                        "type" => "text",
+                        "name" => "first_name"
                     ),
-                    "campus_stuff" => array(
-                        "name" => "campus_stuff",
+
+                    // supertags (multiple)
+                    "supertag_multi_content" => array(
                         "type" => "supertags",
-                        "vocabs" => array("location", "division"),
+                        "name" => "supertag_multi_content",
+                        "vocabs" => array("block", "field_of_study"),
                         "multiple" => 1
                     ),
-                    "campus_location" => array(
-                        "name" => "campus_location",
+
+                    // supertags (single)
+                    "supertag_single_content" => array(
                         "type" => "supertags",
+                        "name" => "supertag_single_content",
                         "vocabs" => array("location"),
                         "multiple" => 0
+                    ),
+
+                    // file
+                    "profile_image" => array(
+                        "type" => "file",
+                        "name" => "profile_image"
+                    ),
+
+                    // repeater (one subfield)
+                    "hobbies" => array(
+                        "type" => "repeater",
+                        "name" => "hobbies",
+                        "sub_fields" => array(
+                            array(
+                                "type" => "text",
+                                "name" => "hobby"
+                            )
+                        )
+                    ),
+
+                    // repeater (one subfield as supertag)
+                    "people" => array(
+                        "type" => "repeater",
+                        "name" => "people",
+                        "sub_fields" => array(
+                            array(
+                                "type" => "supertags",
+                                "name" => "person",
+                                "vocabs" => array("person"),
+                                "multiple" => 0
+                            )
+                        )
+                    ),
+
+                    // repeater (multiple subfields, one as supertag)
+                    "location_ratings" => array(
+                        "type" => "repeater",
+                        "name" => "location_ratings",
+                        "sub_fields" => array(
+                            array(
+                                "type" => "supertags",
+                                "name" => "location",
+                                "vocabs" => array("location"),
+                                "multiple" => 0
+                            ),
+                            array(
+                                "type" => "text",
+                                "name" => "rating"
+                            )
+                        )
+                    ),
+
+                    // repeater (multiple subfields)
+                    "names" => array(
+                        "type" => "repeater",
+                        "name" => "names",
+                        "sub_fields" => array(
+                            array(
+                                "type" => "text",
+                                "name" => "first_name"
+                            ),
+                            array(
+                                "type" => "text",
+                                "name" => "last_name"
+                            )
+                        )
                     )
                 )
             )
         );
+    }
+
+    public function testFindRelationships()
+    {
+        $expected = array(
+            "post" => array(
+                "block" => array(
+                    array(
+                        "name" => "supertag_multi_content",
+                        "multiple" => 1,
+                        "parent" => null,
+                        "onlyChild" => false
+                    )
+                ),
+                "field_of_study" => array(
+                    array(
+                        "name" => "supertag_multi_content",
+                        "multiple" => 1,
+                        "parent" => null,
+                        "onlyChild" => false
+                    )
+                ),
+                "location" => array(
+                    array(
+                        "name" => "supertag_single_content",
+                        "multiple" => 0,
+                        "parent" => null,
+                        "onlyChild" => false
+                    ),
+                    array(
+                        "name" => "location",
+                        "multiple" => 0,
+                        "parent" => "location_ratings",
+                        "onlyChild" => false
+                    )
+                ),
+                "person" => array(
+                    array(
+                        "name" => "person",
+                        "multiple" => 0,
+                        "parent" => "people",
+                        "onlyChild" => true
+                    )
+                )
+            ),
+            "page" => array()
+        );
+
+        $result = $this->testClass->findRelationships();
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testFindSupertags()
+    {
+        $expected = array(
+            "post" => array(
+                "supertag_multi_content" => array(
+                    "type" => "supertags",
+                    "name" => "supertag_multi_content",
+                    "vocabs" => array("block", "field_of_study"),
+                    "multiple" => 1
+                ),
+                "supertag_single_content" => array(
+                    "type" => "supertags",
+                    "name" => "supertag_single_content",
+                    "vocabs" => array("location"),
+                    "multiple" => 0
+                ),
+                "people" => array(
+                    "children" => array(
+                        "person" => array(
+                            "type" => "supertags",
+                            "name" => "person",
+                            "vocabs" => array("person"),
+                            "multiple" => 0
+                        )
+                    )
+                ),
+                "location_ratings" => array(
+                    "children" => array(
+                        "location" => array(
+                            "type" => "supertags",
+                            "name" => "location",
+                            "vocabs" => array("location"),
+                            "multiple" => 0
+                        )
+                    )
+                )
+                
+                
+
+            ),
+            "page" => array()
+        );
+        
+        $result = $this->testClass->findSupertags();
+        $this->assertEquals($expected, $result);
     }
 
     protected function getWordPress()
@@ -121,7 +428,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
         $wordpress->expects($this->any())
             ->method("__call")
             ->will($this->returnValueMap(array(
-                array("get_post_types", array(array("public" => true)), array("person" => "person", "something_else" => "something_else", "noAcfFields" => "noAcfFields")),
+                array("get_post_types", array(array("public" => true)), array("post" => "post", "page" => "page")),
                 array("get_post_meta", array(1), $this->wordpress_meta)
             )));
 
