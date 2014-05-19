@@ -8,20 +8,36 @@ class Base
 
   protected $fieldData = array();
 
+  protected $parent;
+
   protected $fieldName;
 
-  public function __construct($fieldData)
+  public function __construct($fieldData, $parent = null)
   {
     $this->fieldData = $fieldData;
+    $this->parent = $parent;
     $this->fieldName = $fieldData["name"];
+  }
+
+  protected function getValue($meta)
+  {
+    $value = null;
+
+    if ($this->parent && isset($meta["{$this->parent}_{$this->fieldName}"])) {
+      $value = $meta["{$this->parent}_{$this->fieldName}"];
+    } else if (isset($meta[$this->fieldName])) {
+      $value = $meta[$this->fieldName];
+    }
+
+    $this->usedKeys[] = "{$this->parent}_{$this->fieldName}";
+
+    return $value;
   }
 
   public function assemble($meta)
   {
-    $currentValue = isset($meta[$this->fieldName]) ? $meta[$this->fieldName] : null;
-
     return array(
-      $this->fieldName => $currentValue
+      $this->fieldName => $this->getValue($meta)
     );
   }
 }

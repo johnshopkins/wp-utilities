@@ -62,8 +62,8 @@ class ContentTypes
 
             $type = $field['type'];
 
-            $className = "WPUtilities\\ACF\\Fields\\{$type}";
-            $className = class_exists($className) ? $className : "WPUtilities\\ACF\\Fields\\Base";
+            $className = "\\WPUtilities\\ACF\\Fields\\{$type}";
+            $className = class_exists($className) ? $className : "\\WPUtilities\\ACF\\Fields\\Base";
 
             $fieldHelper = new $className($field);
             
