@@ -322,6 +322,103 @@ class ContentTypesTest extends \WPUtilities\BaseTest
         );
     }
 
+    public function testFindRelationships()
+    {
+        $expected = array(
+            "post" => array(
+                "block" => array(
+                    array(
+                        "name" => "supertag_multi_content",
+                        "multiple" => 1,
+                        "parent" => null,
+                        "onlyChild" => false
+                    )
+                ),
+                "field_of_study" => array(
+                    array(
+                        "name" => "supertag_multi_content",
+                        "multiple" => 1,
+                        "parent" => null,
+                        "onlyChild" => false
+                    )
+                ),
+                "location" => array(
+                    array(
+                        "name" => "supertag_single_content",
+                        "multiple" => 0,
+                        "parent" => null,
+                        "onlyChild" => false
+                    ),
+                    array(
+                        "name" => "location",
+                        "multiple" => 0,
+                        "parent" => "location_ratings",
+                        "onlyChild" => false
+                    )
+                ),
+                "person" => array(
+                    array(
+                        "name" => "person",
+                        "multiple" => 0,
+                        "parent" => "people",
+                        "onlyChild" => true
+                    )
+                )
+            ),
+            "page" => array()
+        );
+
+        $result = $this->testClass->findRelationships();
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testFindSupertags()
+    {
+        $expected = array(
+            "post" => array(
+                "supertag_multi_content" => array(
+                    "type" => "supertags",
+                    "name" => "supertag_multi_content",
+                    "vocabs" => array("block", "field_of_study"),
+                    "multiple" => 1
+                ),
+                "supertag_single_content" => array(
+                    "type" => "supertags",
+                    "name" => "supertag_single_content",
+                    "vocabs" => array("location"),
+                    "multiple" => 0
+                ),
+                "people" => array(
+                    "children" => array(
+                        "person" => array(
+                            "type" => "supertags",
+                            "name" => "person",
+                            "vocabs" => array("person"),
+                            "multiple" => 0
+                        )
+                    )
+                ),
+                "location_ratings" => array(
+                    "children" => array(
+                        "location" => array(
+                            "type" => "supertags",
+                            "name" => "location",
+                            "vocabs" => array("location"),
+                            "multiple" => 0
+                        )
+                    )
+                )
+                
+                
+
+            ),
+            "page" => array()
+        );
+        
+        $result = $this->testClass->findSupertags();
+        $this->assertEquals($expected, $result);
+    }
+
     protected function getWordPress()
     {   
         $wordpress = $this->getMockBuilder("\\WPUtilities\\WordPressWrapper")
