@@ -13,6 +13,21 @@ class Post
         $this->contentTypes = isset($deps["acf_contentTypes"]) ? $deps["acf_contentTypes"] : new ACF\ContentTypes();
     }
 
+    /**
+     * Figures out if a given post is a revision. Using wp_is_post_revision()
+     * alone doesn't seem to catch all revisions. When deleting a post with
+     * multiple revisions from edit.php, sometimes a post will return false
+     * from wp_is_post_revision, even though it has a post type of revision.
+     * 
+     * @param  object  $post Post
+     * @return boolean TRUE if revision, FALSE if not a revision
+     */
+    public function isRevision($post)
+    {
+        $revision = $this->wordpress->wp_is_post_revision($post->ID);
+        return $revision || $post->post_type == "revision";
+    }
+
     public function getMeta($id, $postType)
     {
         $meta = $this->wordpress->get_post_meta($id);

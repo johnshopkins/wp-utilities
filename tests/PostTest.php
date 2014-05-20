@@ -19,6 +19,24 @@ class PostTest extends BaseTest
         parent::setup();
     }
 
+    public function testsIsRevision()
+    {
+        $isRevision = new \StdClass();
+        $isRevision->ID = 10;
+        $result = $this->testClass->isRevision($isRevision);
+        $this->assertTrue($result);
+
+        $isRevision->post_type = "revision";
+        $result = $this->testClass->isRevision($isRevision);
+        $this->assertTrue($result);
+
+        $notRevision = new \StdClass();
+        $notRevision->ID = 20;
+        $notRevision->post_type = "post";
+        $result = $this->testClass->isRevision($notRevision);
+        $this->assertFalse($result);
+    }
+
     public function testGetMeta()
     {
         $expected = array(
@@ -57,7 +75,9 @@ class PostTest extends BaseTest
                 array("maybe_unserialize", array("a:1:{i:0;i:7939;}"), array(7939)),
                 array("maybe_unserialize", array("hidden stuff"), "hidden stuff"),
                 array("get_the_tags", array(10), $this->createTagsArray()),
-                array("get_the_tags", array(20), false)
+                array("get_the_tags", array(20), false),
+                array("wp_is_post_revision", array(10), 100),
+                array("wp_is_post_revision", array(20), false)
             )));
 
         return $wordpress;
