@@ -10,7 +10,7 @@ class API
 
   public function __construct($deps = array())
   {
-    $this->http = isset($deps["http"]) ? $deps["http"] : new \HttpExchange\Adapters\Resty(new \Resty());
+    $this->http = isset($deps["http"]) ? $deps["http"] : new \HttpExchange\Adapters\Resty(new \Resty\Resty());
     $this->apiBase = isset($deps["apiBase"]) ? $deps["apiBase"] : \WPUtilities\API::getApiBase();
   }
 

@@ -2,7 +2,7 @@
 
 namespace WPUtilities\ACF\Fields;
 
-class file extends Base
+class wysiwyg extends Base
 {
   protected $multiple;
 
@@ -11,13 +11,10 @@ class file extends Base
     parent::__construct($fieldData, $parent);
   }
 
-  protected function getValue($meta)
+  public function getValue($meta)
   {
     $value = parent::getValue($meta);
-    if (empty($value)) return $value;
-
-    $apiUrl = \WPUtilities\API::getApiBase();
-    return "{$apiUrl}/{$value}/";
+    return $this->wordpress->do_shortcode($value);
   }
-  
+
 }

@@ -12,7 +12,7 @@ class supertags extends Base
     $this->multiple = $fieldData["multiple"];
   }
 
-  public function getValue($meta)
+  protected function getValue($meta)
   {
     $value = parent::getValue($meta);
     if (is_null($value)) $value = array();
@@ -25,10 +25,4 @@ class supertags extends Base
     return $this->multiple ? $value : array_shift($value);
   }
 
-  public function assemble($meta)
-  {
-    return array(
-      $this->fieldName => $this->getValue($meta)
-    );
-  }
 }

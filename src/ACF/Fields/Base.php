@@ -6,14 +6,22 @@ class Base
 {
   public $usedKeys = array();
 
+  /**
+   * WordPress Wrapper
+   * @var object
+   */
+  protected $wordpress;
+
   protected $fieldData = array();
 
   protected $parent;
 
   protected $fieldName;
 
-  public function __construct($fieldData, $parent = null)
+  public function __construct($fieldData, $parent = null, $deps = array())
   {
+    $this->wordpress = isset($deps["wordpress"]) ? $deps["wordpress"] : new \WPUtilities\WordPressWrapper();
+
     $this->fieldData = $fieldData;
     $this->parent = $parent;
     $this->fieldName = $fieldData["name"];
