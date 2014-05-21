@@ -6,9 +6,9 @@ class Twig
 {
   protected $twig;
 
-  public function __construct($templateDir, $deps = array())
+  public function __construct($templateDir, $options = array(), $deps = array())
   {
-    $this->twig = isset($deps["twig"]) ? $deps["twig"] : new \Twig_Environment(new \Twig_Loader_Filesystem($templateDir));
+    $this->twig = isset($deps["twig"]) ? $deps["twig"] : new \Twig_Environment(new \Twig_Loader_Filesystem($templateDir), $options);
   }
 
   public function display($template, $data)

@@ -7,7 +7,7 @@ class TwigTest extends \WPUtilities\BaseTest
 
   public function setUp()
   {
-    $this->testClass = new Twig("someDir", array(
+    $this->testClass = new Twig("someDir", array(), array(
       "twig" => $this->getTwig()
     ));
     parent::setup();
