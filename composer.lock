@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "7a610d3668380d2acf8eb0c62e0b5a04",
+    "hash": "81f229f85d76e0d567c30ed824e711b3",
     "packages": [
         {
             "name": "johnshopkins/http-exchange",
@@ -57,25 +57,28 @@
         },
         {
             "name": "resty/resty",
-            "version": "0.4.0",
+            "version": "0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fictivekin/Resty.php.git",
-                "reference": "f1dae2d4972334984f3c50c0e89444bab9e1fcf6"
+                "reference": "3ba18ec4b507b3b6fcbc49bba5a503baba051c0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fictivekin/Resty.php/zipball/f1dae2d4972334984f3c50c0e89444bab9e1fcf6",
-                "reference": "f1dae2d4972334984f3c50c0e89444bab9e1fcf6",
+                "url": "https://api.github.com/repos/fictivekin/Resty.php/zipball/3ba18ec4b507b3b6fcbc49bba5a503baba051c0a",
+                "reference": "3ba18ec4b507b3b6fcbc49bba5a503baba051c0a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
+            "require-dev": {
+                "funkatron/funit": "dev-master"
+            },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Resty": ""
+                "psr-4": {
+                    "Resty\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -97,7 +100,7 @@
                 "rest",
                 "restful"
             ],
-            "time": "2012-07-17 20:30:54"
+            "time": "2014-02-13 16:19:46"
         },
         {
             "name": "twig/twig",
