@@ -54,7 +54,12 @@ class repeater extends Base
 
           $this->usedKeys = array_merge($this->usedKeys, $fieldHelper->usedKeys);
 
-          if (count($this->subfields) > 1) {
+          if ($this->fieldData["row_limit"] === 1) {
+
+            // this repeater is limited to one row of data
+            $repeaterMeta[$this->fieldName][$subfield] = $value;
+
+          } else if (count($this->subfields) > 1) {
 
             // there more than one subfield in this array, so nest
             // the data in the appropiate subfield

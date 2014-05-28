@@ -51,7 +51,9 @@ class ContentTypesTest extends \WPUtilities\BaseTest
             "names_0_first_name" => "jen",
             "names_0_last_name" => "wachter",
             "names_1_first_name" => "jane",
-            "names_1_last_name" => "doe"
+            "names_1_last_name" => "doe",
+            "car_0_make" => "honda",
+            "car_0_model" => "civic"
 
 
         );
@@ -86,6 +88,10 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                     "first_name" => "jane",
                     "last_name" => "doe"
                 )
+            ),
+            "car" => array(
+                "make" => "honda",
+                "model" => "civic"
             )
         );
 
@@ -152,6 +158,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                 serialize(array(
                     "type" => "repeater",
                     "name" => "hobbies",
+                    "row_limit" => "",
                     "sub_fields" => array(
                         array(
                             "type" => "text",
@@ -166,6 +173,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                 serialize(array(
                     "type" => "repeater",
                     "name" => "people",
+                    "row_limit" => "",
                     "sub_fields" => array(
                         array(
                             "type" => "supertags",
@@ -182,6 +190,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                 serialize(array(
                     "type" => "repeater",
                     "name" => "location_ratings",
+                    "row_limit" => "",
                     "sub_fields" => array(
                         array(
                             "type" => "supertags",
@@ -202,6 +211,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                 serialize(array(
                     "type" => "repeater",
                     "name" => "names",
+                    "row_limit" => "",
                     "sub_fields" => array(
                         array(
                             "type" => "text",
@@ -214,6 +224,27 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                     )
                 ))
             ),
+
+            // repeater (multiple subfields, limit 1 row)
+            "field_5376326d594du" => array(
+                serialize(array(
+                    "type" => "repeater",
+                    "name" => "car",
+                    "row_limit" => 1,
+                    "sub_fields" => array(
+                        array(
+                            "type" => "text",
+                            "name" => "make"
+                        ),
+                        array(
+                            "type" => "text",
+                            "name" => "model"
+                        )
+                    )
+                ))
+            ),
+
+            // repeater (multiple subfields and row limit)
             
             "rule" => array_map(function ($rule) {
                 return serialize($rule);
@@ -267,7 +298,8 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                                 "type" => "text",
                                 "name" => "hobby"
                             )
-                        )
+                        ),
+                        "row_limit" => ""
                     ),
 
                     // repeater (one subfield as supertag)
@@ -281,7 +313,8 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                                 "vocabs" => array("person"),
                                 "multiple" => 0
                             )
-                        )
+                        ),
+                        "row_limit" => ""
                     ),
 
                     // repeater (multiple subfields, one as supertag)
@@ -299,7 +332,8 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                                 "type" => "text",
                                 "name" => "rating"
                             )
-                        )
+                        ),
+                        "row_limit" => ""
                     ),
 
                     // repeater (multiple subfields)
@@ -315,7 +349,25 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                                 "type" => "text",
                                 "name" => "last_name"
                             )
-                        )
+                        ),
+                        "row_limit" => ""
+                    ),
+
+                    // repeater (multiple subfields, limit 1 row)
+                    "car" => array(
+                        "type" => "repeater",
+                        "name" => "car",
+                        "sub_fields" => array(
+                            array(
+                                "type" => "text",
+                                "name" => "make"
+                            ),
+                            array(
+                                "type" => "text",
+                                "name" => "model"
+                            )
+                        ),
+                        "row_limit" => 1
                     )
                 )
             )
