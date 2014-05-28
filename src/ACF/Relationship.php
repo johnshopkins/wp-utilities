@@ -2,10 +2,9 @@
 
 namespace WPUtilities\ACF;
 
-class Supertags
+class Relationship
 {
     protected $contentTypes = array();
-    protected $supertags = array();
     protected $relationships = array();
 
     public function __construct($deps = array())
@@ -15,29 +14,14 @@ class Supertags
 
     }
 
-    public function findRelationships()
+    public function find()
     {
         return $this->relationships;
     }
 
     /**
      * Loop through all the content types compiled by WPUtilities\ACF\ContentTypes
-     * and figure out which fields are supertag fields.
-     *
-     * Compiles an array assigned to $this->supertags
-     *
-     * array(
-     *     {post_type} => array(
-     *          array(
-     *              name: "field_name",
-     *              multiple: 0,
-     *
-     *              parent: "parent_field_name", // if this supertags is contained within a repeater field
-     *              onlyChild: true // if this supertags is contained within a repeater field AND its the only subfield of the repeater field (helps with meta formatting)
-     *          )
-     *     )
-     * )
-     * 
+     * and figure out which fields are relationship fields.
      * @return null
      */
     public function compile()
@@ -63,8 +47,7 @@ class Supertags
     }
 
     /**
-     * Analyze a field for its supertaginess and assign it to
-     * $this->supertags if it is a supertag field.
+     * Analyze a field for its relationship status.
      * @param  string  $type      Post type
      * @param  array   $field     Field being analyzed
      * @param  array   $parent    Name of parent field, if applicable
@@ -73,15 +56,15 @@ class Supertags
      */
     protected function analyzeField($type, $field, $parent = null, $onlyChild = false)
     {
-        if ($field["type"] != "supertags") {
+        if ($field["type"] != "relationship") {
             return;
         }
 
-        foreach ($field["vocabs"] as $vocab) {
+        foreach ($field["post_type"] as $vocab) {
 
             $this->relationships[$type][$vocab][] = array(
                 "name" => $field["name"],
-                "multiple" => $field["multiple"],
+                "multiple" => $field["max"] !== 1,
                 "parent" => $parent,
                 "onlyChild" => $onlyChild
             );

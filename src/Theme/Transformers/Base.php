@@ -18,7 +18,7 @@ class Base
    * @var array
    */
   protected $fetch = array(
-    "supertags",
+    "relationship",
     "file"
   );
 
@@ -85,6 +85,8 @@ class Base
 
   protected function fetch($value)
   {
+    if (is_null($value)) return null;
+    
     if (is_array($value)) {
       $value = array_map(function ($url) {
         return $this->api->get($url)->data;

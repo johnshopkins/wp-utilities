@@ -38,8 +38,8 @@ class ContentTypesTest extends \WPUtilities\BaseTest
     {
         $given = array(
             "first_name" => "jen",
-            "supertag_multi_content" => array(1234, 5678),
-            "supertag_single_content" => array(1234),
+            "relationship_multi_content" => array(1234, 5678),
+            "relationship_single_content" => array(1234),
             "profile_image" => 1234,
             "hobbies_0_hobby" => "Baseball",
             "hobbies_1_hobby" => "Football",
@@ -59,11 +59,11 @@ class ContentTypesTest extends \WPUtilities\BaseTest
         );
         $expected = array(
             "first_name" => "jen",
-            "supertag_multi_content" => array(
+            "relationship_multi_content" => array(
                 "http://local.jhu.edu/api/1234/",
                 "http://local.jhu.edu/api/5678/"
             ),
-            "supertag_single_content" => "http://local.jhu.edu/api/1234/",
+            "relationship_single_content" => "http://local.jhu.edu/api/1234/",
             "profile_image" => "http://local.jhu.edu/api/1234/",
             "hobbies" => array("Baseball", "Football"),
             "people" => array(
@@ -125,23 +125,23 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                 ))
             ),
 
-            // supertags (multiple)
+            // relationship (multiple)
             "field_5376326d599da" => array(
                 serialize(array(
-                    "type" => "supertags",
-                    "name" => "supertag_multi_content",
-                    "vocabs" => array("block", "field_of_study"),
-                    "multiple" => 1
+                    "type" => "relationship",
+                    "name" => "relationship_multi_content",
+                    "post_type" => array("block", "field_of_study"),
+                    "max" => ""
                 ))
             ),
 
-            // supertags (single)
+            // relationship (single)
             "field_5376326d5991b" => array(
                 serialize(array(
-                    "type" => "supertags",
-                    "name" => "supertag_single_content",
-                    "vocabs" => array("location"),
-                    "multiple" => 0
+                    "type" => "relationship",
+                    "name" => "relationship_single_content",
+                    "post_type" => array("location"),
+                    "max" => 1
                 ))
             ),
 
@@ -168,7 +168,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                 ))
             ),
 
-            // repeater (one subfield as supertag)
+            // repeater (one subfield as relationship)
             "field_5376326d5993b" => array(
                 serialize(array(
                     "type" => "repeater",
@@ -176,16 +176,16 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                     "row_limit" => "",
                     "sub_fields" => array(
                         array(
-                            "type" => "supertags",
+                            "type" => "relationship",
                             "name" => "person",
-                            "vocabs" => array("person"),
-                            "multiple" => 0
+                            "post_type" => array("person"),
+                            "max" => 1
                         )
                     )
                 ))
             ),
 
-            // repeater (multiple subfields, one as supertag)
+            // repeater (multiple subfields, one as relationship)
             "field_5376326d5992b" => array(
                 serialize(array(
                     "type" => "repeater",
@@ -193,10 +193,10 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                     "row_limit" => "",
                     "sub_fields" => array(
                         array(
-                            "type" => "supertags",
+                            "type" => "relationship",
                             "name" => "location",
-                            "vocabs" => array("location"),
-                            "multiple" => 0
+                            "post_type" => array("location"),
+                            "max" => 1
                         ),
                         array(
                             "type" => "text",
@@ -267,20 +267,20 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                         "name" => "first_name"
                     ),
 
-                    // supertags (multiple)
-                    "supertag_multi_content" => array(
-                        "type" => "supertags",
-                        "name" => "supertag_multi_content",
-                        "vocabs" => array("block", "field_of_study"),
-                        "multiple" => 1
+                    // relationship (multiple)
+                    "relationship_multi_content" => array(
+                        "type" => "relationship",
+                        "name" => "relationship_multi_content",
+                        "post_type" => array("block", "field_of_study"),
+                        "max" => ""
                     ),
 
-                    // supertags (single)
-                    "supertag_single_content" => array(
-                        "type" => "supertags",
-                        "name" => "supertag_single_content",
-                        "vocabs" => array("location"),
-                        "multiple" => 0
+                    // relationship (single)
+                    "relationship_single_content" => array(
+                        "type" => "relationship",
+                        "name" => "relationship_single_content",
+                        "post_type" => array("location"),
+                        "max" => 1
                     ),
 
                     // file
@@ -308,10 +308,10 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                         "name" => "people",
                         "sub_fields" => array(
                             array(
-                                "type" => "supertags",
+                                "type" => "relationship",
                                 "name" => "person",
-                                "vocabs" => array("person"),
-                                "multiple" => 0
+                                "post_type" => array("person"),
+                                "max" => 1
                             )
                         ),
                         "row_limit" => ""
@@ -323,10 +323,10 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                         "name" => "location_ratings",
                         "sub_fields" => array(
                             array(
-                                "type" => "supertags",
+                                "type" => "relationship",
                                 "name" => "location",
-                                "vocabs" => array("location"),
-                                "multiple" => 0
+                                "post_type" => array("location"),
+                                "max" => 1
                             ),
                             array(
                                 "type" => "text",
@@ -380,7 +380,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
             "post" => array(
                 "block" => array(
                     array(
-                        "name" => "supertag_multi_content",
+                        "name" => "relationship_multi_content",
                         "multiple" => 1,
                         "parent" => null,
                         "onlyChild" => false
@@ -388,7 +388,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                 ),
                 "field_of_study" => array(
                     array(
-                        "name" => "supertag_multi_content",
+                        "name" => "relationship_multi_content",
                         "multiple" => 1,
                         "parent" => null,
                         "onlyChild" => false
@@ -396,7 +396,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                 ),
                 "location" => array(
                     array(
-                        "name" => "supertag_single_content",
+                        "name" => "relationship_single_content",
                         "multiple" => 0,
                         "parent" => null,
                         "onlyChild" => false

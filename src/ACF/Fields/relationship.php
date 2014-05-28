@@ -2,27 +2,27 @@
 
 namespace WPUtilities\ACF\Fields;
 
-class supertags extends Base
+class relationship extends Base
 {
-  protected $multiple;
+  protected $max;
 
   public function __construct($fieldData, $parent = null)
   {
     parent::__construct($fieldData, $parent);
-    $this->multiple = $fieldData["multiple"];
+    $this->max = $fieldData["max"];
   }
 
   protected function getValue($meta)
   {
     $value = parent::getValue($meta);
-    if (is_null($value)) $value = array();
+    if (empty($value)) $value = array();
 
     $apiUrl = \WPUtilities\API::getApiBase();
     $value = array_map(function ($id) use ($apiUrl) {
       return "{$apiUrl}/{$id}/";
     }, $value);
 
-    return $this->multiple ? $value : array_shift($value);
+    return $this->max == 1 ? array_shift($value) : $value;
   }
 
 }

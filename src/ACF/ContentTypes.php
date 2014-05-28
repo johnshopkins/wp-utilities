@@ -19,7 +19,7 @@ namespace WPUtilities\ACF;
  * So we need to take it upon ourselves to clean this data. For this reason, we
  * need to know which fields are assigned to the particular kind of post type we
  * are cleaning up. Knowing the fields, we can find which fields are repeaters and
- * supertags and clean them appropiatly. Previously, we were looking at context
+ * relationships and clean them appropiatly. Previously, we were looking at context
  * clues to see which fields were which, which didn't work out too well.
  * 
  */
@@ -39,7 +39,7 @@ class ContentTypes
         $this->contentTypes = $this->assignFieldsToContentTypes($groups);
 
         $options = array("contentTypes" => $this->contentTypes);
-        $this->supertags = isset($deps["acf_supertags"]) ? $deps["acf_supertags"] : new Supertags($options);
+        $this->relationship = isset($deps["acf_relationship"]) ? $deps["acf_relationship"] : new Relationship($options);
     }
 
     public function find()
@@ -84,7 +84,7 @@ class ContentTypes
 
     public function findRelationships()
     {
-        return $this->supertags->findRelationships();
+        return $this->relationship->find();
     }
 
     /**
