@@ -54,8 +54,8 @@ class repeater extends Base
 
           $this->usedKeys = array_merge($this->usedKeys, $fieldHelper->usedKeys);
 
-          if ($this->fieldData["row_limit"] === 1) {
-
+          if ($this->fieldData["row_limit"] == 1) {
+            
             // this repeater is limited to one row of data
             $repeaterMeta[$this->fieldName][$subfield] = $value;
 
