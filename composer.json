@@ -10,7 +10,6 @@
     }
   },
   "require": {
-    "twig/twig": "1.15.*",
     "johnshopkins/http-exchange": "0.3.*",
     "resty/resty": "0.6.*"
   },
