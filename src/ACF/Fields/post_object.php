@@ -2,7 +2,7 @@
 
 namespace WPUtilities\ACF\Fields;
 
-class file extends Base
+class post_object extends Base
 {
   protected $multiple;
 

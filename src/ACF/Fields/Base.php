@@ -48,4 +48,12 @@ class Base
       $this->fieldName => $this->getValue($meta)
     );
   }
+
+  public function getApiUrl($value)
+  {
+    if (empty($value)) return $value;
+
+    $apiUrl = \WPUtilities\API::getApiBase();
+    return "{$apiUrl}/{$value}/";
+  }
 }
