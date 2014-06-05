@@ -95,7 +95,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
             )
         );
 
-        $result = $this->testClass->cleanMeta($given, "post");
+        $result = $this->testClass->cleanMeta($given, "post", 100);
         $this->assertEquals($expected, $result);
     }
 

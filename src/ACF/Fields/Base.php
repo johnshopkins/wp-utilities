@@ -14,15 +14,24 @@ class Base
 
   protected $fieldData = array();
 
+  /**
+   * Post ID
+   * @var integer
+   */
+  protected $id;
+
   protected $parent;
 
   protected $fieldName;
 
-  public function __construct($fieldData, $parent = null, $deps = array())
+  protected $ansestors;
+
+  public function __construct($fieldData, $id, $parent = null, $deps = array())
   {
     $this->wordpress = isset($deps["wordpress"]) ? $deps["wordpress"] : new \WPUtilities\WordPressWrapper();
 
     $this->fieldData = $fieldData;
+    $this->id = $id;
     $this->parent = $parent;
     $this->fieldName = $fieldData["name"];
   }
@@ -55,5 +64,30 @@ class Base
 
     $apiUrl = \WPUtilities\API::getApiBase();
     return "{$apiUrl}/{$value}/";
+  }
+
+  protected function getAnsestors()
+  {
+    if (is_null($this->ansestors)) {
+      $this->ansestors = $this->wordpress->get_post_ancestors($this->id);
+    }
+    
+    return $this->ansestors; 
+  }
+
+  protected function findParent($metaKey)
+  {
+    $ansestors = $this->getAnsestors();
+
+    foreach ($ansestors as $id) {
+
+      $parent = $this->wordpress->get_post_meta($id, $metaKey, true);;
+      if ($parent == "inherit") continue;
+      return $parent;
+
+    }
+
+    // nothing found
+    return null;
   }
 }

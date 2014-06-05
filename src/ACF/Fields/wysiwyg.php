@@ -6,9 +6,9 @@ class wysiwyg extends Base
 {
   protected $multiple;
 
-  public function __construct($fieldData, $parent = null)
+  public function __construct($fieldData, $id, $parent = null)
   {
-    parent::__construct($fieldData, $parent);
+    parent::__construct($fieldData, $id, $parent);
   }
 
   public function getValue($meta)

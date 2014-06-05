@@ -2,10 +2,8 @@
 
 namespace WPUtilities\ACF\Fields;
 
-class file extends Base
+class sidebar_picker extends Base
 {
-  protected $multiple;
-
   public function __construct($fieldData, $id, $parent = null)
   {
     parent::__construct($fieldData, $id, $parent);
@@ -14,7 +12,17 @@ class file extends Base
   protected function getValue($meta)
   {
     $value = parent::getValue($meta);
-    return $this->getApiUrl($value);
+    if (empty($value)) return null;
+
+    if ($value == "inherit") {
+      $value = $this->findParent("sidebar");
+    }
+
+    if ($value) {
+      $value = $this->getApiUrl($value);
+    }
+
+    return $value;
   }
-  
+
 }

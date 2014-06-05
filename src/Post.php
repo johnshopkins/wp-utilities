@@ -32,7 +32,7 @@ class Post
     {
         $meta = $this->wordpress->get_post_meta($id);
         $meta = $this->fixArrays($meta);
-        $meta = $this->contentTypes->cleanMeta($meta, $postType);
+        $meta = $this->contentTypes->cleanMeta($meta, $postType, $id);
         return $this->removeHiddenMeta($meta);
     }
 

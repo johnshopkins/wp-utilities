@@ -49,11 +49,12 @@ class ContentTypes
 
     /**
      * Clean metadata of all ACF weirdness
-     * @param  array  $meta Metadata
-     * @param  string $type Post type
+     * @param  array   $meta Metadata
+     * @param  string  $type Post type
+     * @param  integer $id Post ID
      * @return array
      */
-    public function cleanMeta($meta, $type)
+    public function cleanMeta($meta, $type, $id)
     {
         $fields = $this->contentTypes[$type];
         $cleanedMeta = array();
@@ -65,7 +66,7 @@ class ContentTypes
             $className = "\\WPUtilities\\ACF\\Fields\\{$type}";
             $className = class_exists($className) ? $className : "\\WPUtilities\\ACF\\Fields\\Base";
 
-            $fieldHelper = new $className($field);
+            $fieldHelper = new $className($field, $id);
             
             // using the given meta, assemble together the field
             $newMeta = $fieldHelper->assemble($meta);

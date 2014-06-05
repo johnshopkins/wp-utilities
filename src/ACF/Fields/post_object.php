@@ -6,9 +6,9 @@ class post_object extends Base
 {
   protected $multiple;
 
-  public function __construct($fieldData, $parent = null)
+  public function __construct($fieldData, $id, $parent = null)
   {
-    parent::__construct($fieldData, $parent);
+    parent::__construct($fieldData, $id, $parent);
   }
 
   protected function getValue($meta)

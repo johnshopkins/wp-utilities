@@ -6,9 +6,9 @@ class repeater extends Base
 {
   protected $subfields;
 
-  public function __construct($fieldData, $parent = null)
+  public function __construct($fieldData, $id, $parent = null)
   {
-    parent::__construct($fieldData, $parent);
+    parent::__construct($fieldData, $id, $parent);
     $this->subfields = $fieldData["sub_fields"];
   }
 
@@ -47,7 +47,7 @@ class repeater extends Base
           $className = "WPUtilities\\ACF\\Fields\\{$subfieldDetails['type']}";
           $className = class_exists($className) ? $className : "WPUtilities\\ACF\\Fields\\Base";
 
-          $fieldHelper = new $className($subfieldDetails, "{$this->fieldName}_{$index}");
+          $fieldHelper = new $className($subfieldDetails, $this->id, "{$this->fieldName}_{$index}");
 
           // using the given meta, assemble together the field
           $value = $fieldHelper->getValue($meta);
