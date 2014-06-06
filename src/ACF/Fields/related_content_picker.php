@@ -18,11 +18,8 @@ class related_content_picker extends Base
       $value = $this->findParent("sidebar");
     }
 
-    if ($value) {
-      $value = $this->getApiUrl($value);
-    }
-
-    return $value;
+    return $value ? $this->getApiUrl($value) : null;
+    
   }
 
 }

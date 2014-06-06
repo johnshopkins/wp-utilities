@@ -18,7 +18,7 @@ class menu_picker extends Base
       $value = $this->findParent("menu");
     }
 
-    return $value;
+    return $value ? $value : null;
   }
 
 }
