@@ -2,7 +2,7 @@
 
 namespace WPUtilities\ACF\Fields;
 
-class sidebar_picker extends Base
+class related_content_picker extends Base
 {
   public function __construct($fieldData, $id, $parent = null)
   {
