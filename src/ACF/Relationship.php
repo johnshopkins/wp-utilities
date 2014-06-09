@@ -28,6 +28,9 @@ class Relationship
     {  
         foreach($this->contentTypes as $type => $fields) {
 
+            // we don't want to relate stuff to related content areas
+            if ($type == "related_content") continue;
+
             $this->relationships[$type] = array();
 
             foreach ($fields as $field) {
