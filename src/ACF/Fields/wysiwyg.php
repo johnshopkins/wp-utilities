@@ -14,7 +14,11 @@ class wysiwyg extends Base
   public function getValue($meta)
   {
     $value = parent::getValue($meta);
-    return $this->wordpress->do_shortcode($value);
+
+    $value = $this->wordpress->do_shortcode($value);
+    $value = $this->wordpress->wpautop($value);
+
+    return $value;
   }
 
 }
