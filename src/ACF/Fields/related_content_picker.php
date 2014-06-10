@@ -15,7 +15,7 @@ class related_content_picker extends Base
     if (empty($value)) return null;
 
     if ($value == "inherit") {
-      $value = $this->findParent("sidebar");
+      $value = $this->findParent("region_related_sidebar");
     }
 
     return $value ? $this->getApiUrl($value) : null;
