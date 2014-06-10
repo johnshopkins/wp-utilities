@@ -14,6 +14,8 @@ class file extends Base
   protected function getValue($meta)
   {
     $value = parent::getValue($meta);
+    if (empty($value)) return null;
+
     return $this->getApiUrl($value);
   }
   
