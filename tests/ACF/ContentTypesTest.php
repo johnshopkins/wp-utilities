@@ -40,7 +40,8 @@ class ContentTypesTest extends \WPUtilities\BaseTest
             "first_name" => "jen",
             "relationship_multi_content" => array(1234, 5678),
             "relationship_single_content" => array(1234),
-            "profile_image" => 1234,
+            "pdf" => 1234,
+            "profile_image" => 1233,
             "hobbies_0_hobby" => "Baseball",
             "hobbies_1_hobby" => "Football",
             "people_0_person" => array(1234),
@@ -64,7 +65,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                 "http://local.jhu.edu/api/5678/"
             ),
             "relationship_single_content" => "http://local.jhu.edu/api/1234/",
-            "profile_image" => "http://local.jhu.edu/api/1234/",
+            "pdf" => "http://local.jhu.edu/api/1234/",
             "hobbies" => array("Baseball", "Football"),
             "people" => array(
                 "http://local.jhu.edu/api/1234/"
@@ -92,7 +93,8 @@ class ContentTypesTest extends \WPUtilities\BaseTest
             "car" => array(
                 "make" => "honda",
                 "model" => "civic"
-            )
+            ),
+            "profile_image" => "http://local.jhu.edu/api/1233/"
         );
 
         $result = $this->testClass->cleanMeta($given, "post", 100);
@@ -149,6 +151,14 @@ class ContentTypesTest extends \WPUtilities\BaseTest
             "field_5376326d5995b" => array(
                 serialize(array(
                     "type" => "file",
+                    "name" => "pdf"
+                ))
+            ),
+
+            // image
+            "field_5396326d5995b" => array(
+                serialize(array(
+                    "type" => "image",
                     "name" => "profile_image"
                 ))
             ),
@@ -284,8 +294,14 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                     ),
 
                     // file
-                    "profile_image" => array(
+                    "pdf" => array(
                         "type" => "file",
+                        "name" => "pdf"
+                    ),
+
+                    // image
+                    "profile_image" => array(
+                        "type" => "image",
                         "name" => "profile_image"
                     ),
 
