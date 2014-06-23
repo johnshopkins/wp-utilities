@@ -6,15 +6,10 @@ class repeater extends Base
 {
   protected $subfields;
 
-  public function __construct($fieldData, $id, $parent = null)
+  public function __construct($fieldData, $id, $parent = null, $deps = array())
   {
-    parent::__construct($fieldData, $id, $parent);
+    parent::__construct($fieldData, $id, $parent, $deps);
     $this->subfields = $fieldData["sub_fields"];
-  }
-
-  public function getValue($meta)
-  {
-    // nested repeaters. not supported yet.
   }
 
   public function assemble($meta)

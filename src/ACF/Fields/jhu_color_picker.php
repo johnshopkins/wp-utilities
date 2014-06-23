@@ -4,9 +4,9 @@ namespace WPUtilities\ACF\Fields;
 
 class jhu_color_picker extends Base
 {
-  public function __construct($fieldData, $id, $parent = null)
+  public function __construct($fieldData, $id, $parent = null, $deps = array())
   {
-    parent::__construct($fieldData, $id, $parent);
+    parent::__construct($fieldData, $id, $parent, $deps);
   }
 
   protected function getValue($meta)

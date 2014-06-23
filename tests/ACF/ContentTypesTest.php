@@ -37,69 +37,21 @@ class ContentTypesTest extends \WPUtilities\BaseTest
     public function testCleanMeta()
     {
         $given = array(
-            "first_name" => "jen",
             "relationship_multi_content" => array(1234, 5678),
-            "relationship_single_content" => array(1234),
-            "pdf" => 1234,
-            "profile_image" => 1233,
-            "hobbies_0_hobby" => "Baseball",
-            "hobbies_1_hobby" => "Football",
-            "people_0_person" => array(1234),
-            "location_ratings_0_location" => array(1234),
-            "location_ratings_0_rating" => "5 stars",
-            "location_ratings_1_location" => array(5678),
-            "location_ratings_1_rating" => "4 stars",
-            "names_0_first_name" => "jen",
-            "names_0_last_name" => "wachter",
-            "names_1_first_name" => "jane",
-            "names_1_last_name" => "doe",
-            "car_0_make" => "honda",
-            "car_0_model" => "civic"
-
-
+            "relationship_single_content" => array(1234)
         );
         $expected = array(
-            "first_name" => "jen",
             "relationship_multi_content" => array(
                 "http://local.jhu.edu/api/1234/",
                 "http://local.jhu.edu/api/5678/"
             ),
-            "relationship_single_content" => "http://local.jhu.edu/api/1234/",
-            "pdf" => "http://local.jhu.edu/api/1234/",
-            "hobbies" => array("Baseball", "Football"),
-            "people" => array(
-                "http://local.jhu.edu/api/1234/"
-            ),
-            "location_ratings" => array(
-                array(
-                    "location" => "http://local.jhu.edu/api/1234/",
-                    "rating" => "5 stars"
-                ),
-                array(
-                    "location" => "http://local.jhu.edu/api/5678/",
-                    "rating" => "4 stars"
-                )
-            ),
-            "names" => array(
-                array(
-                    "first_name" => "jen",
-                    "last_name" => "wachter"
-                ),
-                array(
-                    "first_name" => "jane",
-                    "last_name" => "doe"
-                )
-            ),
-            "car" => array(
-                "make" => "honda",
-                "model" => "civic"
-            ),
-            "profile_image" => "http://local.jhu.edu/api/1233/"
+            "relationship_single_content" => "http://local.jhu.edu/api/1234/"
         );
 
         $result = $this->testClass->cleanMeta($given, "post", 100);
         $this->assertEquals($expected, $result);
     }
+
 
     protected function makeVars()
     {
@@ -118,14 +70,6 @@ class ContentTypesTest extends \WPUtilities\BaseTest
 
             // some other meta, not a field
             "not_a_field" => "not_a_field",
-
-            // standard text
-            "field_5376326d599df" => array(
-                serialize(array(
-                    "type" => "text",
-                    "name" => "first_name"
-                ))
-            ),
 
             // relationship (multiple)
             "field_5376326d599da" => array(
@@ -146,115 +90,6 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                     "max" => 1
                 ))
             ),
-
-            // file
-            "field_5376326d5995b" => array(
-                serialize(array(
-                    "type" => "file",
-                    "name" => "pdf"
-                ))
-            ),
-
-            // image
-            "field_5396326d5995b" => array(
-                serialize(array(
-                    "type" => "image",
-                    "name" => "profile_image"
-                ))
-            ),
-
-            // repeater (one subfield)
-            "field_5376326d5997b" => array(
-                serialize(array(
-                    "type" => "repeater",
-                    "name" => "hobbies",
-                    "row_limit" => "",
-                    "sub_fields" => array(
-                        array(
-                            "type" => "text",
-                            "name" => "hobby"
-                        )
-                    )
-                ))
-            ),
-
-            // repeater (one subfield as relationship)
-            "field_5376326d5993b" => array(
-                serialize(array(
-                    "type" => "repeater",
-                    "name" => "people",
-                    "row_limit" => "",
-                    "sub_fields" => array(
-                        array(
-                            "type" => "relationship",
-                            "name" => "person",
-                            "post_type" => array("person"),
-                            "max" => 1
-                        )
-                    )
-                ))
-            ),
-
-            // repeater (multiple subfields, one as relationship)
-            "field_5376326d5992b" => array(
-                serialize(array(
-                    "type" => "repeater",
-                    "name" => "location_ratings",
-                    "row_limit" => "",
-                    "sub_fields" => array(
-                        array(
-                            "type" => "relationship",
-                            "name" => "location",
-                            "post_type" => array("location"),
-                            "max" => 1
-                        ),
-                        array(
-                            "type" => "text",
-                            "name" => "rating"
-                        )
-                    )
-                ))
-            ),
-
-            // repeater (multiple subfields)
-            "field_5376326d594db" => array(
-                serialize(array(
-                    "type" => "repeater",
-                    "name" => "names",
-                    "row_limit" => "",
-                    "sub_fields" => array(
-                        array(
-                            "type" => "text",
-                            "name" => "first_name"
-                        ),
-                        array(
-                            "type" => "text",
-                            "name" => "last_name"
-                        )
-                    )
-                ))
-            ),
-
-            // repeater (multiple subfields, limit 1 row)
-            "field_5376326d594du" => array(
-                serialize(array(
-                    "type" => "repeater",
-                    "name" => "car",
-                    "row_limit" => 1,
-                    "sub_fields" => array(
-                        array(
-                            "type" => "text",
-                            "name" => "make"
-                        ),
-                        array(
-                            "type" => "text",
-                            "name" => "model"
-                        )
-                    )
-                ))
-            ),
-
-            // repeater (multiple subfields and row limit)
             
             "rule" => array_map(function ($rule) {
                 return serialize($rule);
@@ -271,12 +106,6 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                 "rules" => $rules,
                 "fields" => array(
 
-                    // standard text
-                    "first_name" => array(
-                        "type" => "text",
-                        "name" => "first_name"
-                    ),
-
                     // relationship (multiple)
                     "relationship_multi_content" => array(
                         "type" => "relationship",
@@ -291,99 +120,6 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                         "name" => "relationship_single_content",
                         "post_type" => array("location"),
                         "max" => 1
-                    ),
-
-                    // file
-                    "pdf" => array(
-                        "type" => "file",
-                        "name" => "pdf"
-                    ),
-
-                    // image
-                    "profile_image" => array(
-                        "type" => "image",
-                        "name" => "profile_image"
-                    ),
-
-                    // repeater (one subfield)
-                    "hobbies" => array(
-                        "type" => "repeater",
-                        "name" => "hobbies",
-                        "sub_fields" => array(
-                            array(
-                                "type" => "text",
-                                "name" => "hobby"
-                            )
-                        ),
-                        "row_limit" => ""
-                    ),
-
-                    // repeater (one subfield as supertag)
-                    "people" => array(
-                        "type" => "repeater",
-                        "name" => "people",
-                        "sub_fields" => array(
-                            array(
-                                "type" => "relationship",
-                                "name" => "person",
-                                "post_type" => array("person"),
-                                "max" => 1
-                            )
-                        ),
-                        "row_limit" => ""
-                    ),
-
-                    // repeater (multiple subfields, one as supertag)
-                    "location_ratings" => array(
-                        "type" => "repeater",
-                        "name" => "location_ratings",
-                        "sub_fields" => array(
-                            array(
-                                "type" => "relationship",
-                                "name" => "location",
-                                "post_type" => array("location"),
-                                "max" => 1
-                            ),
-                            array(
-                                "type" => "text",
-                                "name" => "rating"
-                            )
-                        ),
-                        "row_limit" => ""
-                    ),
-
-                    // repeater (multiple subfields)
-                    "names" => array(
-                        "type" => "repeater",
-                        "name" => "names",
-                        "sub_fields" => array(
-                            array(
-                                "type" => "text",
-                                "name" => "first_name"
-                            ),
-                            array(
-                                "type" => "text",
-                                "name" => "last_name"
-                            )
-                        ),
-                        "row_limit" => ""
-                    ),
-
-                    // repeater (multiple subfields, limit 1 row)
-                    "car" => array(
-                        "type" => "repeater",
-                        "name" => "car",
-                        "sub_fields" => array(
-                            array(
-                                "type" => "text",
-                                "name" => "make"
-                            ),
-                            array(
-                                "type" => "text",
-                                "name" => "model"
-                            )
-                        ),
-                        "row_limit" => 1
                     )
                 )
             )
@@ -416,20 +152,6 @@ class ContentTypesTest extends \WPUtilities\BaseTest
                         "multiple" => 0,
                         "parent" => null,
                         "onlyChild" => false
-                    ),
-                    array(
-                        "name" => "location",
-                        "multiple" => 0,
-                        "parent" => "location_ratings",
-                        "onlyChild" => false
-                    )
-                ),
-                "person" => array(
-                    array(
-                        "name" => "person",
-                        "multiple" => 0,
-                        "parent" => "people",
-                        "onlyChild" => true
                     )
                 )
             ),
