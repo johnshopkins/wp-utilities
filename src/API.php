@@ -30,9 +30,14 @@ class API
   public function get($endpoint, $params = array())
   {
     if (substr($endpoint, 0, strlen($this->apiBase)) != $this->apiBase) {
+
+      if (substr($endpoint, 0, 1) != "/") {
+        $endpoint = "/{$endpoint}";
+      }
+
       $endpoint = $this->apiBase . $endpoint;
     }
-
+    
     return $this->http->get($endpoint, $params)->getBody();
   }
 
