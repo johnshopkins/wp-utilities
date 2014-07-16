@@ -18,7 +18,7 @@ class Section
    * on WordPress settings pages with a shared heading.
    * 
    * @param object $menuPage    Menu page to attach this settings section to.
-   *                            Instance of SubMenuPage
+   *                            Instance of SubMenuPage or a string.
    * @param string $sectionSlug Section slug
    * @param string $title       Section title
    * @param array  $fields      Array describing the fields in this section
@@ -27,7 +27,7 @@ class Section
    */
 	public function __construct($menuPage, $sectionSlug, $title, $fields, $content = "", $deps = array())
 	{
-		$this->menuPage = $menuPage->id;
+		$this->menuPage = is_string($menuPage) ? $menuPage : $menuPage->id;
 		$this->sectionSlug = $sectionSlug;
 		$this->title = $title;
 		$this->fields = $fields;

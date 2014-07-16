@@ -27,29 +27,23 @@ class FieldCreator
         return $html;
     }
 
-    public static function text($name, $args)
+    public static function select($name, $args)
     {
-        $html = "";
+        $html = "<select name='{$name}' id='{$name}'>";
+        $html .= "<option value=''>— Select —</option>";
 
-        // if ($args["label"]) {
-        //     $html .= "<label for='{$name}'>{$args['label']}</label> ";
-        // }
+        foreach ($args["options"] as $k => $v) {
+            $selected = $args["value"] == $k ? "selected=selected" : "";
+            $html .= "<option value='{$k}' {$selected}>{$v}</option>";
+        }
 
-        $html .= "<input type='text' name='{$name}' value='{$args['value']}' class='regular-text' />";
+        $html .= "</select>";
 
         return $html;
     }
 
-    public static function select($name, $label, $value)
+    public static function text($name, $args)
     {
-        $html = "";
-
-        if ($label) {
-            $html .= "<label for=\"{$name}\">{$label}</label> ";
-        }
-
-        $html .= "<input type=\"text\" name=\"{$name}\" value=\"" . $value . "\" class=\"regular-text\">";
-
-        return $html;
+        return "<input type='text' name='{$name}' value='{$args['value']}' class='regular-text' />";
     }
 }

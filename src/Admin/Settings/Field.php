@@ -14,7 +14,7 @@ class Field
 
 	protected $wordpress;
 
-	public function __construct($fieldName, $fieldDetails, $page, $section, $deps = array())
+	public function __construct($fieldName, $fieldDetails, $page, $section = "default", $deps = array())
 	{
 		$this->fieldName = $fieldName;
 		$this->fieldDetails = $fieldDetails;
@@ -23,7 +23,7 @@ class Field
 		$this->section = $section;
 		$this->validation = isset($fieldDetails["validation"]) ? $fieldDetails["validation"] : null;
 
-		$this->option_id = "{$this->section}_{$this->fieldName}";
+		$this->option_id = $this->section != "default" ? "{$this->section}_{$this->fieldName}" : $this->fieldName;
 
 		$this->wordpress = isset($deps["wordpress"]) ? $deps["wordpress"] : new \WPUtilities\WordPressWrapper();
 
@@ -71,8 +71,8 @@ class Field
 
 	protected function get_select($args)
 	{
-		$value = $this->wordpress->get_option($this->option_id);
-		return FieldCreator::select($this->option_id, null, 1, $checked);
+		$args["value"] = $this->wordpress->get_option($this->option_id);
+		return FieldCreator::select($this->option_id, $args);
 	}
 
 }
