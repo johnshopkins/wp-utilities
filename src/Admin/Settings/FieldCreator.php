@@ -10,14 +10,14 @@ class FieldCreator
 
         foreach ($args["options"] as $k => $v) {
 
-            $name = "{$name}[$k}";
+            $fieldName = "{$name}[$k]";
 
             $checked = isset($args["value"][$k]) && $args["value"][$k] == 1 ? "checked=checked" : "";
 
-            $html .= "<input type='checkbox' name='{$name}' value='1' {$checked} />";
+            $html .= "<input type='checkbox' name='{$fieldName}' value='1' {$checked} />";
 
             if (!empty($v)) {
-                $html .= " <label for='{$name}'>{$v}</label>";
+                $html .= " <label for='{$fieldName}'>{$v}</label>";
             }
 
             $html .= "<br />";
