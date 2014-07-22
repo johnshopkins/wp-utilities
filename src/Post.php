@@ -36,13 +36,12 @@ class Post
         return $this->removeHiddenMeta($meta);
     }
 
-    public function getTags($id)
+    public function getTerms($id, $taxonomy)
     {
-        $tags = $this->wordpress->get_the_tags($id);
-        if (!$tags) return array();
-        return array_map(function ($tag) {
-            return $tag->name;
-        }, $tags);
+        $terms = $this->wordpress->wp_get_post_terms($id, $taxonomy);
+        return array_map(function ($term) {
+            return $term->name;
+        }, $terms);
     }
 
     protected function fixArrays($meta)
