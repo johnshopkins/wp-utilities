@@ -56,6 +56,9 @@ class ContentTypes
      */
     public function cleanMeta($meta, $type, $id)
     {
+        // for ACF posts
+        if (!isset($this->contentTypes[$type])) return array();
+        
         $fields = $this->contentTypes[$type];
         $cleanedMeta = array();
 
