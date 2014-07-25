@@ -150,7 +150,7 @@ class ContentTypes
     protected function assignFieldsToContentTypes($fieldGroups)
     {   
         // find all post types
-        $postTypes = $this->wordpress->get_post_types(array("public" => true));
+        $postTypes = $this->wordpress->get_post_types(array("show_in_menu" => "content"));
 
         foreach ($postTypes as $type) {
 
