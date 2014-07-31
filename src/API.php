@@ -22,8 +22,6 @@ class API
 
     if ($env != "production") {
       $prefix = $env . ".";
-    } else {
-      $prefix = "beta.";
     }
 
     return "http://{$prefix}jhu.edu/api";
