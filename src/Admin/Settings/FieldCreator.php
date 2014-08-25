@@ -24,6 +24,10 @@ class FieldCreator
 
         }
 
+        if (isset($args["description"])) {
+            $html .= "<p class='description'>{$args['description']}</p>";
+        }
+
         return $html;
     }
 
@@ -39,11 +43,21 @@ class FieldCreator
 
         $html .= "</select>";
 
+        if (isset($args["description"])) {
+            $html .= "<p class='description'>{$args['description']}</p>";
+        }
+
         return $html;
     }
 
     public static function text($name, $args)
     {
-        return "<input type='text' name='{$name}' value='{$args['value']}' class='regular-text' />";
+        $html = "<input type='text' name='{$name}' value='{$args['value']}' class='regular-text' />";
+
+        if (isset($args["description"])) {
+            $html .= "<p class='description'>{$args['description']}</p>";
+        }
+        
+        return $html;
     }
 }
