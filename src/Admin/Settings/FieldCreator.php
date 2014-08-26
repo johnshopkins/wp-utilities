@@ -6,6 +6,8 @@ class FieldCreator
 {
     public static function checkbox_group($name, $args)
     {
+        if (!empty($args["html"])) return $args["html"];
+
         $html = "";
 
         foreach ($args["options"] as $k => $v) {
@@ -33,6 +35,8 @@ class FieldCreator
 
     public static function select($name, $args)
     {
+        if (!empty($args["html"])) return $args["html"];
+
         $html = "<select name='{$name}' id='{$name}'>";
         $html .= "<option value=''>— Select —</option>";
 
@@ -52,6 +56,8 @@ class FieldCreator
 
     public static function text($name, $args)
     {
+        if (!empty($args["html"])) return $args["html"];
+        
         $html = "<input type='text' name='{$name}' value='{$args['value']}' class='regular-text' />";
 
         if (isset($args["description"])) {
