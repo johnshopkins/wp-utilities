@@ -24,7 +24,7 @@ class API
       $prefix = $env . ".";
     }
 
-    return "http://{$prefix}jhu.edu/api";
+    return "https://{$prefix}jhu.edu/api";
   }
 
   public function get($endpoint, $params = array())
