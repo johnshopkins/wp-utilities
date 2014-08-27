@@ -27,6 +27,36 @@ class WysiwygTest extends \WPUtilities\BaseTest
     $result = $method->invoke($this->testClass, array("wysiwyg_field" => "some text"));
     $this->assertEquals(array("wysiwyg_field" => "some text transformed again"), $result);
   }
+
+  public function testAbsoluteToRelativeLinks() 
+  {
+    $method = $this->getMethod("absoluteToRelativeLinks");
+
+    $given = "http://local.jhu.edu";
+    $expected = "/";
+
+    $result = $method->invoke($this->testClass, $given);
+    $this->assertEquals($expected, $result);
+
+    $given = "http://staging.jhu.edu/";
+    $expected = "/";
+
+    $result = $method->invoke($this->testClass, $given);
+    $this->assertEquals($expected, $result);
+
+    $given = "http://somethingelse.jhu.edu/testing/testing";
+    $expected = "/testing/testing";
+
+    $result = $method->invoke($this->testClass, $given);
+    $this->assertEquals($expected, $result);
+
+    $given = "http://jhu.edu/testing/testing http://local.jhu.edu/testing/testing";
+    $expected = "/testing/testing /testing/testing";
+
+    $result = $method->invoke($this->testClass, $given);
+    $this->assertEquals($expected, $result);
+
+  }
   
   protected function getWordPress()
   {   
@@ -38,7 +68,8 @@ class WysiwygTest extends \WPUtilities\BaseTest
       ->method("__call")
       ->will($this->returnValueMap(array(
         array("do_shortcode", array("some text"), "some text transformed"),
-        array("wpautop", array("some text transformed"), "some text transformed again")
+        array("wpautop", array("some text transformed"), "some text transformed again"),
+        array("get_home_url", array(), "http://jhu.edu")
       )));
 
     return $wordpress;
