@@ -171,7 +171,7 @@ class ContentTypesTest extends \WPUtilities\BaseTest
         $wordpress->expects($this->any())
             ->method("__call")
             ->will($this->returnValueMap(array(
-                array("get_post_types", array(array("public" => true)), array("post" => "post", "page" => "page")),
+                array("get_post_types", array(array("show_in_menu" => "content")), array("post" => "post", "page" => "page")),
                 array("get_post_meta", array(1), $this->wordpress_meta)
             )));
 

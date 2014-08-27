@@ -49,14 +49,14 @@ class PostTest extends BaseTest
         $this->assertEquals($expected, $result);
     }
 
-    public function testGetTags()
+    public function testGetTerms()
     {
         $expected = array("astronomy", "space");
 
-        $result = $this->testClass->getTags(10);
+        $result = $this->testClass->getTerms(10, "post_tag");
         $this->assertEquals($expected, $result);
 
-        $result = $this->testClass->getTags(20);
+        $result = $this->testClass->getTerms(20, "post_tag");
         $this->assertEquals(array(), $result);
     }
 
@@ -74,8 +74,8 @@ class PostTest extends BaseTest
                 array("maybe_unserialize", array("baltimore"), "baltimore"),
                 array("maybe_unserialize", array("a:1:{i:0;i:7939;}"), array(7939)),
                 array("maybe_unserialize", array("hidden stuff"), "hidden stuff"),
-                array("get_the_tags", array(10), $this->createTagsArray()),
-                array("get_the_tags", array(20), false),
+                array("wp_get_post_terms", array(10, "post_tag"), $this->createTagsArray()),
+                array("wp_get_post_terms", array(20, "post_tag"), array()),
                 array("wp_is_post_revision", array(10), 100),
                 array("wp_is_post_revision", array(20), false)
             )));
