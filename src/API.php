@@ -17,7 +17,6 @@ class API
   public static function getApiBase($env = null)
   {
     $env = is_null($env) ? ENV : $env;
-    $protocol = isset($_SERVER["HTTPS"]) && !empty($_SERVER["HTTPS"]) ? "https" : "http";
 
     $prefix = "";
 
@@ -25,7 +24,7 @@ class API
       $prefix = $env . ".";
     }
 
-    return "{$protocol}://{$prefix}jhu.edu/api";
+    return "https://{$prefix}jhu.edu/api";
   }
 
   public function get($endpoint, $params = array())
