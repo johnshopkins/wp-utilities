@@ -31,16 +31,18 @@ class wysiwyg extends Base
 
   protected function getDomainRegex()
   {
-    // get the home url, without http:// or https://
-    $home_url = $this->wordpress->get_home_url();
-    $home_url = str_replace(array("http://", "https://"), "", $home_url);
+    // // get the home url, without http:// or https://
+    // $home_url = $this->wordpress->get_home_url();
+    // $home_url = str_replace(array("http://", "https://"), "", $home_url);
 
-    // return top level domain (ex: jhu.edu)
-    $parts = explode(".", $home_url);
-    $domain = implode(".", array_slice($parts, -2));
+    // // return top level domain (ex: jhu.edu)
+    // $parts = explode(".", $home_url);
+    // $domain = implode(".", array_slice($parts, -2));
 
-    // match any subdomain
-    return "/http(s)?:\/\/([^\.].)*" . $domain . "(\/)?/";
+    // // match any subdomain
+    // return "/http(s)?:\/\/([^\.].)*" . $domain . "(\/)?/";
+
+    return "/http(s)?:\/\/(local|staging|beta)*.jhu.edu(\/)?/";
   }
 
 }
