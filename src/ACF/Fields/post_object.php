@@ -14,7 +14,7 @@ class post_object extends Base
   protected function getValue($meta)
   {
     $value = parent::getValue($meta);
-    if (empty($value)) return null;
+    if (empty($value) || $value == "null") return null;
     
     return $this->getApiUrl($value);
   }
