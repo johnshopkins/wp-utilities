@@ -20,6 +20,7 @@ class taxonomy extends Base
     return array_map(function ($id) {
       $term = $this->wordpress->get_term($id, $this->taxonomy);
       return array(
+        "id" => $term->term_id,
         "name" => $term->name,
         "slug" => $term->slug
       );
