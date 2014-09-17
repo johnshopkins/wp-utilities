@@ -15,8 +15,11 @@ class page_link extends Base
     $value = parent::getValue($meta);
 
     if (empty($value) || $value == "null") return null;
-    
-    return get_permalink($value);
+
+    return array(
+      "url" => get_permalink($value),
+      "title" => get_the_title($value)
+    );
   }
   
 }
