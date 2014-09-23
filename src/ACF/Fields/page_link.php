@@ -16,7 +16,7 @@ class page_link extends Base
 
     if (empty($value) || $value == "null") return null;
 
-    return (int) $value;
+    return $this->getApiUrl($value);
   }
   
 }
