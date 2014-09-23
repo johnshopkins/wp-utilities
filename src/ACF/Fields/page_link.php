@@ -16,10 +16,7 @@ class page_link extends Base
 
     if (empty($value) || $value == "null") return null;
 
-    return array(
-      "url" => get_permalink($value),
-      "title" => get_the_title($value)
-    );
+    return (int) $value;
   }
   
 }
