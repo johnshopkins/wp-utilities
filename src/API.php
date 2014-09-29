@@ -27,7 +27,7 @@ class API
     return "https://{$prefix}jhu.edu/api";
   }
 
-  public function get($endpoint, $params = array())
+  public function get($endpoint, $params = array(), $headers = array(), $options = array())
   {
     if (substr($endpoint, 0, strlen($this->apiBase)) != $this->apiBase) {
 
@@ -38,7 +38,7 @@ class API
       $endpoint = $this->apiBase . $endpoint;
     }
     
-    return $this->http->get($endpoint, $params)->getBody();
+    return $this->http->get($endpoint, $params, $headers, $options)->getBody();
   }
 
 }
