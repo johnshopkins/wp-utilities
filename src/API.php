@@ -4,7 +4,7 @@ namespace WPUtilities;
 
 class API
 {
-  
+
   protected $http;
   protected $apiBase;
 
@@ -20,7 +20,13 @@ class API
 
     $prefix = "";
 
-    if ($env != "production") {
+    // if ($env != "production") {
+    //   $prefix = $env . ".";
+    // }
+
+    if ($env == "production") {
+      $prefix = "beta.";
+    } else {
       $prefix = $env . ".";
     }
 
@@ -37,7 +43,7 @@ class API
 
       $endpoint = $this->apiBase . $endpoint;
     }
-    
+
     return $this->http->get($endpoint, $params, $headers, $options)->getBody();
   }
 
