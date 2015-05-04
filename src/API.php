@@ -48,11 +48,7 @@ class API
       $endpoint = "/{$endpoint}";
     }
 
-<<<<<<< HEAD
     $endpoint = $this->apiBase . $endpoint;
-
-=======
->>>>>>> develop
     return $this->http->get($endpoint, $params, $headers, $options)->getBody();
   }
 
