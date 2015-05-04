@@ -20,12 +20,11 @@ class API
 
     $prefix = "";
 
-    // if ($env != "production") {
-    //   $prefix = $env . ".";
-    // }
-
     if ($env == "production") {
-      $prefix = "beta.";
+      $prefix = $admin ? "origin-beta1" : "www";
+    } else {
+      // $prefix = $admin ? "{$env}-test" : $env;
+      $prefix = $env;
     }
 
     return "https://{$prefix}jhu.edu/api";
