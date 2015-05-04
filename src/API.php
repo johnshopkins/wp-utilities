@@ -20,7 +20,7 @@ class API
     $prefix = "www";
 
     if ($env == "production") {
-      $prefix = $admin ? "origin-beta2" : "www";
+      $prefix = $admin ? "origin-beta4" : "www";
     } else {
       // $prefix = $admin ? "{$env}-test" : $env;
       $prefix = $env;
