@@ -4,11 +4,7 @@ namespace WPUtilities;
 
 class API
 {
-<<<<<<< HEAD
   public $apiBase;
-=======
-
->>>>>>> develop
   protected $http;
 
   public function __construct($deps = array(), $admin = false)
