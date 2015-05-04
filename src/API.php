@@ -4,7 +4,11 @@ namespace WPUtilities;
 
 class API
 {
+<<<<<<< HEAD
   public $apiBase;
+=======
+
+>>>>>>> develop
   protected $http;
 
   public function __construct($deps = array(), $admin = false)
@@ -20,7 +24,7 @@ class API
     $prefix = "www";
 
     if ($env == "production") {
-      $prefix = $admin ? "origin-beta1" : "beta";
+      $prefix = $admin ? "origin-beta1" : "www";
     } else {
       // $prefix = $admin ? "{$env}-test" : $env;
       $prefix = $env;
@@ -48,8 +52,11 @@ class API
       $endpoint = "/{$endpoint}";
     }
 
+<<<<<<< HEAD
     $endpoint = $this->apiBase . $endpoint;
 
+=======
+>>>>>>> develop
     return $this->http->get($endpoint, $params, $headers, $options)->getBody();
   }
 
