@@ -42,7 +42,7 @@ class wysiwyg extends Base
     // // match any subdomain
     // return "/http(s)?:\/\/([^\.].)*" . $domain . "(\/)?/";
 
-    return "/http(s)?:\/\/(local|staging|beta)*.jhu.edu(\/)?/";
+    return "/http(s)?:\/\/(local|staging|beta|www)*.jhu.edu(\/)?/";
   }
 
 }
