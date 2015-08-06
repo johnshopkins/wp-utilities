@@ -75,6 +75,11 @@ class Post
         }, $terms);
     }
 
+    public function getTermObjects($id, $taxonomy)
+    {
+        return $this->wordpress->wp_get_post_terms($id, $taxonomy);
+    }
+
     protected function fixArrays($meta)
     {
         foreach($meta as $k => &$v) {
