@@ -35,7 +35,7 @@ class API
    * is https://beta, but the request needs to be made to https://origin-beta
    * because the API has been set to admin mode.
    */
-  protected function removeBaseUrl($endpoint)
+  public function removeBaseUrl($endpoint)
   {
     return preg_replace("/^(.*?)\.jhu\.edu\/api/", "", $endpoint);
   }
