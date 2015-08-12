@@ -75,9 +75,19 @@ class Post
         }, $terms);
     }
 
-    public function getTermObjects($id, $taxonomy)
+    public function getTermObjects($id, $taxonomy, $fields = array())
     {
-        return $this->wordpress->wp_get_post_terms($id, $taxonomy);
+      $terms = $this->wordpress->wp_get_post_terms($id, $taxonomy);
+
+      foreach ($terms as $term) {
+
+        foreach ($fields as $field) {
+          $term->$field = get_field($field, $term);
+        }
+
+      }
+
+      return $terms;
     }
 
     protected function fixArrays($meta)
