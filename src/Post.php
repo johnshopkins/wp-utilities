@@ -81,6 +81,8 @@ class Post
 
       foreach ($terms as $term) {
 
+        $term->parent = get_term_by("id", $term->parent, $taxonomy);
+
         foreach ($fields as $field) {
           $term->$field = get_field($field, $term);
         }
