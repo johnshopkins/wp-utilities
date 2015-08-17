@@ -6,12 +6,7 @@
     "url": "git://github.com/johnshopkins/wp-utilities.git"
   },
   "author": [
-    "Jason Rhodes",
     "Jen Wachter"
   ],
-  "readmeFilename": "README.md",
-  "devDependencies": {
-    "gulp": "^3.6.2",
-    "gulp-tasks": "git+ssh://git@github.com:johnshopkins/gulp-tasks.git"
-  }
+  "readmeFilename": "README.md"
 }
