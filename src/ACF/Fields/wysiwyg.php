@@ -19,8 +19,14 @@ class wysiwyg extends Base
     $value = $this->wordpress->do_shortcode($value);
     $value = $this->wordpress->wpautop($value);
     $value = $this->absoluteToRelativeLinks($value);
+    $value = $this->removeUnicodeNbsp($value);
 
     return $value;
+  }
+
+  protected function removeUnicodeNbsp($value)
+  {
+    return str_replace("\xc2\xa0", " ", $value);
   }
 
   protected function absoluteToRelativeLinks($value)
