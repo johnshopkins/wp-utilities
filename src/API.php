@@ -49,7 +49,24 @@ class API
     }
 
     $endpoint = $this->apiBase . $endpoint;
-    return $this->http->get($endpoint, $params, $headers, $options)->getBody();
+
+    $response = $this->http->get($endpoint, $params, $headers, $options);
+
+    $body = $response->getBody();
+    $status = $response->getStatusCode();
+
+    if ($status !== 200) {
+      $body = array(
+        "error" => array(
+          "code" => $status
+        )
+      );
+
+      // force object
+      $body = json_decode(json_encode($body));
+    }
+
+    return $body;
   }
 
 }
