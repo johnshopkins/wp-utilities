@@ -20,7 +20,7 @@ class API
     $prefix = "www";
 
     if ($env == "production") {
-      $prefix = $admin ? "origin-beta1" : "www";
+      $prefix = $admin ? "origin-beta3" : "www";
     } else {
       // $prefix = $admin ? "{$env}-test" : $env;
       $prefix = $env;
@@ -35,7 +35,7 @@ class API
    * is https://beta, but the request needs to be made to https://origin-beta
    * because the API has been set to admin mode.
    */
-  protected function removeBaseUrl($endpoint)
+  public function removeBaseUrl($endpoint)
   {
     return preg_replace("/^(.*?)\.jhu\.edu\/api/", "", $endpoint);
   }
@@ -48,12 +48,25 @@ class API
       $endpoint = "/{$endpoint}";
     }
 
-<<<<<<< HEAD
     $endpoint = $this->apiBase . $endpoint;
 
-=======
->>>>>>> develop
-    return $this->http->get($endpoint, $params, $headers, $options)->getBody();
+    $response = $this->http->get($endpoint, $params, $headers, $options);
+
+    $body = $response->getBody();
+    $status = $response->getStatusCode();
+
+    if ($status !== 200) {
+      $body = array(
+        "error" => array(
+          "code" => $status
+        )
+      );
+
+      // force object
+      $body = json_decode(json_encode($body));
+    }
+
+    return $body;
   }
 
 }

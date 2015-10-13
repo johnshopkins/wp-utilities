@@ -6,6 +6,7 @@ class Post
 {
     protected $wordpress;
     protected $contentTypes = array();
+    protected $children = array();
 
     public function __construct($deps = array())
     {
@@ -18,7 +19,7 @@ class Post
      * alone doesn't seem to catch all revisions. When deleting a post with
      * multiple revisions from edit.php, sometimes a post will return false
      * from wp_is_post_revision, even though it has a post type of revision.
-     * 
+     *
      * @param  object  $post Post
      * @return boolean TRUE if revision, FALSE if not a revision
      */
@@ -26,6 +27,36 @@ class Post
     {
         $revision = $this->wordpress->wp_is_post_revision($post->ID);
         return $revision || $post->post_type == "revision";
+    }
+
+    /**
+     * Get children of a post
+     * @param integer $id Post ID
+     * @param boolean $id Return a flat array of IDs (TRUE)
+     *                    or return multidimensional array of
+     *                    posts that preserves hierarchy (FALSE)
+     */
+    public function getChildren($id, $returnFlat = true)
+    {
+      $children = $this->getChildrenOfPost($id);
+      return $returnFlat ? $this->children : $children;
+    }
+
+    protected function getChildrenOfPost($id)
+    {
+      $children = get_children(array(
+        "post_parent" => $id,
+        "post_type" => "page"
+      ));
+
+      foreach ($children as &$child) {
+
+        $id = $child->ID;
+        $this->children[] = $id;
+        $child->children = $this->getChildrenOfPost($id);
+      }
+
+      return $children;
     }
 
     public function getMeta($id, $postType)
@@ -44,6 +75,23 @@ class Post
         }, $terms);
     }
 
+    public function getTermObjects($id, $taxonomy, $fields = array())
+    {
+      $terms = $this->wordpress->wp_get_post_terms($id, $taxonomy);
+
+      foreach ($terms as $term) {
+
+        $term->parent = get_term_by("id", $term->parent, $taxonomy);
+
+        foreach ($fields as $field) {
+          $term->$field = get_field($field, $term);
+        }
+
+      }
+
+      return $terms;
+    }
+
     protected function fixArrays($meta)
     {
         foreach($meta as $k => &$v) {
@@ -55,7 +103,7 @@ class Post
 
             // unserialize serialized arrays
             $v = $this->wordpress->maybe_unserialize($v);
-            
+
         }
 
         return $meta;
