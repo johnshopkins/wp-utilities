@@ -10,16 +10,18 @@ class API
   public function __construct($deps = array(), $admin = false)
   {
     $this->http = new \HttpExchange\Adapters\Resty(new \Resty\Resty());
-    $this->apiBase = \WPUtilities\API::getApiBase();
+    $this->apiBase = \WPUtilities\API::getApiBase(null, $admin);
   }
 
-  public static function getApiBase($env = null)
+  public static function getApiBase($env = null, $admin = false)
   {
     $env = is_null($env) ? ENV : $env;
 
     $prefix = "www";
 
-    if ($env != "production") {
+    if ($env == "production") {
+      $prefix = $admin ? "origin-beta1" : "www";
+    } else {
       $prefix = $env;
     }
 
