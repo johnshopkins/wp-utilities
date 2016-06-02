@@ -69,29 +69,19 @@ class Post
           return array();
         }
 
-        // try {
-          foreach ($fields as $field) {
+        foreach ($fields as $field) {
 
-              // relationship, image, etc...
-              $type = $field["type"];
+            // relationship, image, etc...
+            $type = $field["type"];
 
-              $className = "\\WPUtilities\\ACF\\FieldCleaners\\{$type}";
-              $className = class_exists($className) ? $className : "\\WPUtilities\\ACF\\FieldCleaners\\Base";
+            $className = "\\WPUtilities\\ACF\\FieldCleaners\\{$type}";
+            $className = class_exists($className) ? $className : "\\WPUtilities\\ACF\\FieldCleaners\\Base";
 
-              $fieldCleaner = new $className($field, $id);
+            $fieldCleaner = new $className($field, $id);
 
-              $meta[$field["name"]] = $fieldCleaner->clean();
+            $meta[$field["name"]] = $fieldCleaner->clean();
 
-          }
-        // } catch (\Exception $e) {
-        //   print_r($e->getMessage());
-        //   print_r($e->getLine());
-        //   print_r($id);
-        //   print_r($fields); die();
-        // }
-
-
-        print_r($meta); die();
+        }
 
         return $meta;
     }
