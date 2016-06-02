@@ -1,19 +1,12 @@
 <?php
 
-namespace WPUtilities\ACF\Fields;
+namespace WPUtilities\ACF\FieldCleaners;
 
 class wysiwyg extends Base
 {
-  protected $multiple;
-
-  public function __construct($fieldData, $id, $parent = null, $deps = array())
+  public function getValue()
   {
-    parent::__construct($fieldData, $id, $parent, $deps);
-  }
-
-  public function getValue($meta)
-  {
-    $value = parent::getValue($meta);
+    $value = parent::getValue();
     if (empty($value)) return null;
 
     $value = $this->wordpress->do_shortcode($value);
