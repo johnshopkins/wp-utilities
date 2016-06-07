@@ -36,7 +36,7 @@ class repeater extends Base
 
     }
 
-    if ($this->field["row_limit"] == 1) {
+    if ($this->field["max"] == 1) {
       return array_shift($this->field["value"]);
     } else {
       return $this->field["value"];
