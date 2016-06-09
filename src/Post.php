@@ -5,13 +5,11 @@ namespace WPUtilities;
 class Post
 {
     protected $wordpress;
-    protected $contentTypes = array();
     protected $children = array();
 
-    public function __construct($deps = array())
+    public function __construct()
     {
-        $this->wordpress = isset($deps["wordpress"]) ? $deps["wordpress"] : new WordPressWrapper();
-        $this->contentTypes = isset($deps["acf_contentTypes"]) ? $deps["acf_contentTypes"] : new ACF\ContentTypes();
+        $this->wordpress = new WordPressWrapper();
     }
 
     /**
@@ -59,12 +57,33 @@ class Post
       return $children;
     }
 
-    public function getMeta($id, $postType)
+    public function getMeta($id)
     {
-        $meta = $this->wordpress->get_post_meta($id);
-        $meta = $this->fixArrays($meta);
-        $meta = $this->contentTypes->cleanMeta($meta, $postType, $id);
-        return $this->removeHiddenMeta($meta);
+        $meta = array();
+
+        // includes info about the field in addition to the value
+        $fields = get_field_objects($id);
+
+        if (!$fields) {
+          // no advanced custom fields (ex: image)
+          return array();
+        }
+
+        foreach ($fields as $field) {
+
+            // relationship, image, etc...
+            $type = $field["type"];
+
+            $className = "\\WPUtilities\\ACF\\FieldCleaners\\{$type}";
+            $className = class_exists($className) ? $className : "\\WPUtilities\\ACF\\FieldCleaners\\Base";
+
+            $fieldCleaner = new $className($field, $id);
+
+            $meta[$field["name"]] = $fieldCleaner->clean();
+
+        }
+
+        return $meta;
     }
 
     public function getTerms($id, $taxonomy)
@@ -90,34 +109,5 @@ class Post
       }
 
       return $terms;
-    }
-
-    protected function fixArrays($meta)
-    {
-        foreach($meta as $k => &$v) {
-
-            // if there is only one value, shift it out
-            if (is_array($v) && count($v) == 1) {
-                $v = array_shift($v);
-            }
-
-            // unserialize serialized arrays
-            $v = $this->wordpress->maybe_unserialize($v);
-
-        }
-
-        return $meta;
-    }
-
-    protected function removeHiddenMeta($meta)
-    {
-        foreach($meta as $k => &$v) {
-
-            if (preg_match("/^_/", $k)) {
-                unset($meta[$k]);
-            }
-        }
-
-        return $meta;
     }
 }
