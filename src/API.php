@@ -9,7 +9,7 @@ class API
 
   public function __construct($deps = array(), $admin = false)
   {
-    $this->http = new \HttpExchange\Adapters\Resty(new \Resty\Resty());
+    $this->http = new \HttpExchange\Adapters\Guzzle(new \GuzzleHttp\Client());
     $this->apiBase = \WPUtilities\API::getApiBase(null, $admin);
   }
 
