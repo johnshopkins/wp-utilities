@@ -11,6 +11,7 @@ class API
   {
     $this->http = new \HttpExchange\Adapters\Guzzle(new \GuzzleHttp\Client());
     $this->apiBase = \WPUtilities\API::getApiBase(null, $admin);
+    $this->admin = $admin;
   }
 
   public static function getApiBase($env = null, $admin = false)
@@ -48,6 +49,10 @@ class API
     }
 
     $endpoint = $this->apiBase . $endpoint;
+
+    if ($this->admin) {
+      $options["verify"] = false;
+    }
 
     $response = $this->http->get($endpoint, $params, $headers, $options);
 
