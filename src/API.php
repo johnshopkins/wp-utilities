@@ -7,9 +7,10 @@ class API
   public $apiBase;
   protected $http;
 
-  public function __construct($deps = array(), $admin = false)
+  public function __construct($logger, $admin = false)
   {
-    $this->http = new \HttpExchange\Adapters\Guzzle(new \GuzzleHttp\Client());
+    $this->logger = $logger;
+    $this->http = new \HttpExchange\Adapters\Guzzle(new \GuzzleHttp\Client(), $this->logger);
     $this->apiBase = \WPUtilities\API::getApiBase(null, $admin);
     $this->admin = $admin;
   }
