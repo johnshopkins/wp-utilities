@@ -10,7 +10,7 @@ class API
   public function __construct($logger, $admin = false)
   {
     $this->logger = $logger;
-    $this->http = new \HttpExchange\Adapters\Guzzle(new \GuzzleHttp\Client(), $this->logger);
+    $this->http = new \HttpExchange\Adapters\Guzzle(new \GuzzleHttp\Client(array("debug" => true)), $this->logger);
     $this->apiBase = \WPUtilities\API::getApiBase(null, $admin);
     $this->admin = $admin;
   }
